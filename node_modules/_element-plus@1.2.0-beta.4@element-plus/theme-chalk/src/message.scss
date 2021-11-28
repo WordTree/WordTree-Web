@@ -1,0 +1,111 @@
+@use 'sass:map';
+
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+
+@include b(message) {
+  @include set-component-css-var('message', $message);
+}
+
+@include b(message) {
+  min-width: var(--el-message-min-width);
+  box-sizing: border-box;
+  border-radius: var(--el-border-radius-base);
+  border-width: var(--el-border-width-base);
+  border-style: var(--el-border-style-base);
+  border-color: var(--el-border-color-lighter);
+  position: fixed;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  background-color: var(--el-message-bg-color);
+  transition: opacity 0.3s, transform 0.4s, top 0.4s;
+  background-color: var(--el-message-bg-color);
+  transition: opacity var(--el-transition-duration), transform 0.4s, top 0.4s;
+  padding: var(--el-message-padding);
+  display: flex;
+  align-items: center;
+
+  @include when(center) {
+    justify-content: center;
+  }
+
+  @include when(closable) {
+    .#{$namespace}-message__content {
+      padding-right: 16px;
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+
+  @include m(info) {
+    .#{$namespace}-message__content {
+      color: var(--el-message-info-text-color);
+    }
+  }
+
+  @each $type in (success, info, warning, error) {
+    @include m($type) {
+      background-color: map.get($colors, $type, 'light-9');
+      border-color: map.get($colors, $type, 'light-8');
+
+      --el-message-text-color: var(--el-color-#{$type});
+
+      .#{$namespace}-message__content {
+        color: var(--el-message-text-color);
+      }
+    }
+  }
+
+  @include e(icon) {
+    margin-right: 10px;
+  }
+
+  @include e(badge) {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+
+  @include e(content) {
+    padding: 0;
+    font-size: 14px;
+    line-height: 1;
+    &:focus {
+      outline-width: 0;
+    }
+  }
+
+  @include e(closeBtn) {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--el-message-close-icon-color);
+    font-size: var(--el-message-close-size, map.get($message, 'close-size'));
+
+    &:focus {
+      outline-width: 0;
+    }
+    &:hover {
+      color: var(--el-message-close-hover-color);
+    }
+  }
+
+  @each $type in (success, info, warning, error) {
+    & .#{$namespace}-message-icon--#{$type} {
+      --el-message-text-color: var(--el-color-#{$type});
+      color: var(--el-message-text-color);
+    }
+  }
+}
+
+.#{$namespace}-message-fade-enter-from,
+.#{$namespace}-message-fade-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -100%);
+}

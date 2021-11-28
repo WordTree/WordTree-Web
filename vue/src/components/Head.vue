@@ -22,6 +22,9 @@
 </template>
 
 <script lang="ts" setup>
+export default {
+  name: 'Head'
+}
 
 </script>
 

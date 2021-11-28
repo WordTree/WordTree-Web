@@ -1,0 +1,21 @@
+import type { CSSProperties } from 'vue';
+import type { Nullable } from './types';
+export declare const on: (element: HTMLElement | Document | Window, event: string, handler: EventListenerOrEventListenerObject, useCapture?: boolean) => void;
+export declare const off: (element: HTMLElement | Document | Window, event: string, handler: EventListenerOrEventListenerObject, useCapture?: boolean) => void;
+export declare const once: (el: HTMLElement, event: string, fn: EventListener) => void;
+export declare function hasClass(el: HTMLElement | Element, cls: string): boolean;
+export declare function addClass(el: HTMLElement | Element, cls: string): void;
+export declare function removeClass(el: HTMLElement | Element, cls: string): void;
+export declare const getStyle: (element: HTMLElement, styleName: string) => string;
+export declare function setStyle(element: HTMLElement, styleName: CSSProperties | string, value?: string): void;
+export declare function removeStyle(element: HTMLElement, style: CSSProperties | string): void;
+export declare const isScroll: (el: HTMLElement, isVertical?: Nullable<boolean> | undefined) => RegExpMatchArray | null;
+export declare const getScrollContainer: (el: HTMLElement, isVertical?: Nullable<boolean> | undefined) => Window | HTMLElement | undefined;
+export declare const isInContainer: (el: Element | undefined, container: Element | Window | undefined) => boolean;
+export declare const getOffsetTop: (el: HTMLElement) => number;
+export declare const getOffsetTopDistance: (el: HTMLElement, containerEl: HTMLElement) => number;
+export declare const stop: (e: Event) => void;
+export declare const getClientXY: (event: MouseEvent | TouchEvent) => {
+    clientX: number;
+    clientY: number;
+};

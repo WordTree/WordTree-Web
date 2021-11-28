@@ -1,0 +1,1 @@
+{"version":3,"file":"isDef.js","sources":["../../../../packages/utils/isDef.ts"],"sourcesContent":["export function isKorean(text: string): boolean {\n  const reg = /([(\\uAC00-\\uD7AF)|(\\u3130-\\u318F)])+/gi\n  return reg.test(text)\n}\n"],"names":[],"mappings":";;;;kBAAyB,MAAuB;AAC9C,QAAM,MAAM;AACZ,SAAO,IAAI,KAAK;AAAA;;;;"}

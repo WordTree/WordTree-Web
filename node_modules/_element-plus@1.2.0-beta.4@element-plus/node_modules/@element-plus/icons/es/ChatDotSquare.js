@@ -1,0 +1,29 @@
+import { defineComponent, openBlock, createBlock, createVNode } from 'vue';
+
+var script = defineComponent({
+  name: "ChatDotSquare"
+});
+
+const _hoisted_1 = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 1024 1024"
+};
+const _hoisted_2 = /* @__PURE__ */ createVNode("path", {
+  fill: "currentColor",
+  d: "M273.536 736H800a64 64 0 0 0 64-64V256a64 64 0 0 0-64-64H224a64 64 0 0 0-64 64v570.88L273.536 736zM296 800 147.968 918.4A32 32 0 0 1 96 893.44V256a128 128 0 0 1 128-128h576a128 128 0 0 1 128 128v416a128 128 0 0 1-128 128H296z"
+}, null, -1);
+const _hoisted_3 = /* @__PURE__ */ createVNode("path", {
+  fill: "currentColor",
+  d: "M512 499.2a51.2 51.2 0 1 1 0-102.4 51.2 51.2 0 0 1 0 102.4zm192 0a51.2 51.2 0 1 1 0-102.4 51.2 51.2 0 0 1 0 102.4zm-384 0a51.2 51.2 0 1 1 0-102.4 51.2 51.2 0 0 1 0 102.4z"
+}, null, -1);
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("svg", _hoisted_1, [
+    _hoisted_2,
+    _hoisted_3
+  ]);
+}
+
+script.render = render;
+script.__file = "packages/components/ChatDotSquare.vue";
+
+export default script;

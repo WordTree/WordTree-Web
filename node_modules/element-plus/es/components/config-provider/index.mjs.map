@@ -1,0 +1,1 @@
+{"version":3,"file":"index.mjs","sources":["../../../../../packages/components/config-provider/index.ts"],"sourcesContent":["import { withInstall } from '@element-plus/utils/with-install'\nimport { ConfigProvider } from './src'\n\nexport const ElConfigProvider = withInstall(ConfigProvider)\nexport default ElConfigProvider\n"],"names":[],"mappings":";;;MAGa,mBAAmB,YAAY;;;;"}

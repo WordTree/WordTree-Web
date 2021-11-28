@@ -1,0 +1,1 @@
+{"version":3,"file":"index.mjs","sources":["../../../../../packages/components/check-tag/index.ts"],"sourcesContent":["import { withInstall } from '@element-plus/utils/with-install'\nimport CheckTag from './src/index.vue'\n\nexport const ElCheckTag = withInstall(CheckTag)\nexport default ElCheckTag\n"],"names":["CheckTag"],"mappings":";;;;MAGa,aAAa,YAAYA;;;;"}

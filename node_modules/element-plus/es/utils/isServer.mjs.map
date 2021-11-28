@@ -1,0 +1,1 @@
+{"version":3,"file":"isServer.mjs","sources":["../../../../packages/utils/isServer.ts"],"sourcesContent":["export default typeof window === 'undefined'\n"],"names":[],"mappings":"AAAA,eAAe,OAAO,WAAW;;;;"}
