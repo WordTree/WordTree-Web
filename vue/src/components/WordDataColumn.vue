@@ -1,48 +1,68 @@
 <template>
-  <el-card shadow="hover" class="card">
+  <div class="column-chart">
+    <div class="cation">
+      <span class="caption-text">近七天学习统计</span>
+    </div>
     <div id="container"></div>
-  </el-card>
+  </div>
 </template>
 
 <script>
 import { Column } from "@antv/g2plot";
 export default {
   name: "WordDataColumn",
-  props:{
-      data:[]
+  props: {
+    data: [],
   },
   mounted() {
-      let data = this.data;
-    const stackedColumnPlot = new Column("container", {
+    let data = this.data;
+    const column = new Column("container", {
       data,
-      isStack: true,
       xField: "date",
       yField: "value",
       seriesField: "type",
-      colorField: "type", // 部分图表使用 seriesField
-      color: ["#d62728", "#2ca02c", "#000000"],
-      label: {
-        // 可手动配置 label 数据标签位置
-        position: "middle", // 'top', 'bottom', 'middle'
-        // 可配置附加的布局方法
-        layout: [
-          // 柱形图数据标签位置自动调整
-          { type: "interval-adjust-position" },
-          // 数据标签防遮挡
-          { type: "interval-hide-overlap" },
-          // 数据标签文颜色自动调整
-          { type: "adjust-color" },
-        ],
+      isGroup: "true",
+      autoFit:"true",
+      maxColumnWidth: 30,
+      columnStyle: {
+        radius: [20, 20, 0, 0],
+        fillOpacity: 0.9,
       },
     });
-    stackedColumnPlot.render();
+    column.render();
   },
 };
 </script>
 
 <style scoped>
-.card {
-  width: 75%;
-  height: 440px;
+#container {
+  width: 100%;
+  min-height: 400px;
+}
+
+.column-chart {
+  border-color: transparent;
+  border-radius: 6px;
+  background-color: #fff;
+  padding: 10px;
+  height: 420px;
+  margin: 25px;
+  flex:1 1 auto;
+}
+
+.caption-text {
+  font-size: 14px;
+  color: rgb(89, 89, 89);
+}
+
+.caption {
+   margin: 20px 0 30px 15px;
+   padding:10px;
+}
+
+@media (max-width:707px) {
+  .column-chart{
+    margin:10px;
+  }
 }
 </style>

@@ -17,6 +17,9 @@
       <div class="column-chart">
         <WordDataColumn :data="columnChartData"/>
       </div>
+      <div class="circle-chart">
+
+      </div>
     </div>
   </div>
 </template>
@@ -140,11 +143,6 @@ export default {
 }
 
 
-.bottom-chart {
-  display:flex;
-  flex-wrap:wrap;
-  width:100%;
-}
 
 .header {
   height:50px;
@@ -169,6 +167,21 @@ export default {
   height:231px;
   margin:20px 0px;
 }
+}
+
+
+.bottom-chart {
+  display:flex;
+  flex-wrap:nowrap;
+  width:100%;
+}
+
+.column-chart {
+  flex:1;
+}
+
+.circle-chart {
+  width:400px;
 }
 
 </style>
