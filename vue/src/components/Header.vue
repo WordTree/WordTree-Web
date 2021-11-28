@@ -4,8 +4,14 @@
       <div style="flex: 1"></div>
         <div class="drop-items">
           <el-dropdown>
+             <div class="user-image">
+                <el-avatar
+                :src="url"
+                shape="circle"
+                size="60"
+                 ></el-avatar>
+            </div>
                 <span class="el-dropdown-link">
-                UserName
                      <i class="el-icon-caret-bottom"></i>
                 </span>
             <template #dropdown>
@@ -21,7 +27,10 @@
 
 <script>
 export default {
-    name: 'Header'
+    name: 'Header',
+    props: {
+      url:String,
+    }
 }
 </script>
 

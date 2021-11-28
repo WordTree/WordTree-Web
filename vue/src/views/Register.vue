@@ -1,47 +1,54 @@
 <template>
   <div class="body">
     <div
-      class="login-card"
+      class="register-card"
       style="width: 400px; margin: 150px auto; z-index: 10"
     >
-    <el-card shadow="always" class="card" >
-      <div
-        style="
-          color: aliceblue;
-          font-size: 30px;
-          text-align: center;
-          font-weight: bold;
-          padding: 30px;
-        "
-      >
-        Login
-      </div>
-      <el-form :model="form" :rules="rules" ref="form" size="normal">
-        <el-form-item prop="username" style="padding-left: 43px">
-          <el-input
-            placeholder="用户名"
-            prefix-icon="el-icon-user-solid"
-            style="width: 90%"
-            v-model="form.username"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password" style="padding-left: 43px">
-          <el-input
-            placeholder="密码"
-            prefix-icon="el-icon-lock"
-            style="width: 90%"
-            v-model="form.password"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item style="padding-left: 110px">
-          <el-button style="width: 30%" type="success" @click="login"
-            >登 录</el-button
-          >
-          <el-button style="width: 30%" @click="register">注 册</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
+      <el-card shadow="always" class="card">
+        <div
+          style="
+            color: aliceblue;
+            font-size: 30px;
+            text-align: center;
+            font-weight: bold;
+            padding: 30px;
+          "
+        >
+          Register
+        </div>
+        <el-form :model="form" :rules="rules" ref="form" size="normal">
+          <el-form-item prop="username" style="padding-left:40px">
+            <el-input
+              placeholder="用户名"
+              prefix-icon="el-icon-user-solid"
+              style="width: 90%"
+              v-model="form.username"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="password" style="padding-left:40px">
+            <el-input
+              placeholder="密码"
+              prefix-icon="el-icon-lock"
+              style="width: 90%"
+              v-model="form.password"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="confirm" style="padding-left:40px">
+            <el-input
+              placeholder="请再次输入密码"
+              style="width: 90%"
+              v-model="form.confirm"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item style="padding-left:140px">
+            <el-button style="width: 40%;" type="success" @click="register" 
+              >注 册</el-button
+            >
+          </el-form-item>
+        </el-form>
+      </el-card>
     </div>
   </div>
 </template>
@@ -50,7 +57,7 @@
 import request from "../utils/request";
 
 export default {
-  name: "Login",
+  name: "Register",
   data() {
     return {
       form: {},
@@ -59,25 +66,30 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" },
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        confirm: [
+          { required: true, message: "请再次输入密码", trigger: "blur" },
+        ],
       },
     };
   },
-  created() {
-    //每次跳转到登录界面则移除缓存的用户信息
-    sessionStorage.removeItem("user");
-  },
   methods: {
-    login() {
+    register() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          request.post("/user/login", this.form).then((res) => {
+          if (this.form.password !== this.form.confirm) {
+            this.$message({
+              type: "error",
+              message: "两次密码输入不一致",
+            });
+            return;
+          }
+          request.post("/user/register", this.form).then((res) => {
             if (res.code === "0") {
               this.$message({
                 type: "success",
-                message: "登录成功！",
+                message: "注册成功！",
               });
-              sessionStorage.setItem("user", JSON.stringify(res.data)); //缓存用户信息
-              this.$router.push("/"); //登录成功
+              this.$router.push("/login"); //注册成功
             } else {
               this.$message({
                 type: "error",
@@ -88,12 +100,10 @@ export default {
         }
       });
     },
-    register() {
-      this.$router.push("/register");
-    },
   },
 };
 </script>
+
 
 <style scoped>
 .body {
@@ -146,9 +156,9 @@ export default {
 }
 
 .card {
-    border-radius: 10px;
-    background-color: rgba(235, 105, 78, 0.15);
-    border-color:transparent;
+  border-radius: 10px;
+  background-color: rgba(235, 105, 78, 0.15);
+  border-color: transparent;
 }
 
 @keyframes movement {
@@ -179,7 +189,7 @@ export default {
   }
 }
 
-.login-card {
+.register-card {
   position: relative;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="header"><Header /></div>
+    <div class="header"><Header :url="userImageUrl"/></div>
     <div class="User">
       <div class="word-target">
         <text-card title="复习计划" :content="`${reviewWordCount} words`" />
@@ -70,3 +70,6 @@ export default {
   height: 100%;
 }
 </style>
+
+
+
