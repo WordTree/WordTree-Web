@@ -13,20 +13,30 @@
         <User :url="userImageUrl" :userName="userName" />
       </div>
     </div>
+    <WordDataColumn/>
+
   </div>
+
+
+
 </template>
 
 <script>
 // @ is an alias to /src
 import Header from "@/components/Header.vue";
 import TextCard from "@/components/TextCard.vue";
-import User from "@/components/User.vue";;
+import User from "@/components/User.vue";
+import WordDataColumn from "../components/WordDataColumn";
+
+
 export default {
   name: "Home",
   components: {
+    WordDataColumn,
     Header,
     TextCard,
     User,
+
   },
   data() {
     return {
