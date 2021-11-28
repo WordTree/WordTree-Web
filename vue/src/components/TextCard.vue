@@ -38,4 +38,11 @@ export default {
         font-size:24px;
         padding-bottom: 10px;
     }
+
+    @media (max-width:707px) {
+        .card {
+        width:100%;
+        margin:10px 0px;
+        } 
+    }
 </style>
