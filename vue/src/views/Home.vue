@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="header"><Header /></div>
+    <div class="header"><Header :url="userImageUrl" /></div>
     <div class="User">
       <div class="word-target">
         <text-card title="复习计划" :content="`${reviewWordCount} words`" />
@@ -9,16 +9,16 @@
           :content="`${learnedWordCount} / ${totalWordCount} words`"
         />
       </div>
-      <div id="user-greeting">
-        <User :url="userImageUrl" :userName="userName" />
+        <div class="user-greeting">
+          <User :url="userImageUrl" :userName="userName" />
+        </div>
+    </div>
+    <div class="bottom-chart">
+      <div class="column-chart">
+        <WordDataColumn :data="columnChartData"/>
       </div>
     </div>
-    <WordDataColumn/>
-
   </div>
-
-
-
 </template>
 
 <script>
@@ -27,7 +27,7 @@ import Header from "@/components/Header.vue";
 import TextCard from "@/components/TextCard.vue";
 import User from "@/components/User.vue";
 import WordDataColumn from "../components/WordDataColumn";
-
+import request from "../utils/request";
 
 export default {
   name: "Home",
@@ -36,18 +36,109 @@ export default {
     Header,
     TextCard,
     User,
-
   },
   data() {
     return {
+      user:{},    //用户信息
       reviewWordCount: 0,
       learnedWordCount: 0,
       totalWordCount: 0,
       userImageUrl:
         "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-      userName: "Lxy",
+      userName:"Lxy",
+      columnChartData:[
+        {
+          "date":'11-24',
+          "value":40,
+          "type":"review"
+        },
+                {
+          "date":'11-24',
+          "value":25,
+          "type":"learn"
+        },
+                {
+          "date":'11-25',
+          "value":40,
+          "type":"review"
+        },
+                {
+          "date":'11-25',
+          "value":25,
+          "type":"learn"
+        },
+                {
+          "date":'11-26',
+          "value":40,
+          "type":"review"
+        },
+                {
+          "date":'11-26',
+          "value":25,
+          "type":"learn"
+        },
+                {
+          "date":'11-27',
+          "value":40,
+          "type":"review"
+        },
+                {
+          "date":'11-27',
+          "value":25,
+          "type":"learn"
+        },
+                {
+          "date":'11-28',
+          "value":40,
+          "type":"review"
+        },
+                {
+          "date":'11-28',
+          "value":25,
+          "type":"learn"
+        },
+                {
+          "date":'11-29',
+          "value":40,
+          "type":"review"
+        },
+                {
+          "date":'11-29',
+          "value":25,
+          "type":"learn"
+        },
+                {
+          "date":'11-30',
+          "value":40,
+          "type":"review"
+        },
+                {
+          "date":'11-30',
+          "value":25,
+          "type":"learn"
+        }
+      ],
     };
   },
+  created() {
+    this.refreshUser();
+    console.log(this.user.avator);
+    console.log(this.$data.userName);
+    console.log(this.$data.userImageUrl);
+    console.log(this.userName);
+  },
+  methods:{
+    refreshUser() {
+      let userJson = localStorage.getItem("user");
+      if (!userJson) {
+        this.$router.push("/login");
+        return;
+      }
+      this.user = JSON.parse(userJson);
+      this.userImageUrl = this.user.avator;
+      this.userName = this.user.userName;
+    }
+  }
 };
 </script>
 
@@ -55,7 +146,7 @@ export default {
 .home {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   background-color: rgb(239, 242, 245);
   height: 100vh;
 }
@@ -63,10 +154,42 @@ export default {
 .User {
   display: flex;
   flex-wrap: wrap-reverse;
+  height:auto;
 }
 
-#user-greeting {
-  flex:1;
-  height: 100%;
+
+.bottom-chart {
+  display:flex;
+  flex-wrap:wrap;
+  width:100%;
 }
+
+.header {
+  height:50px;
+}
+
+.user-greeting {
+  flex:1;
+  padding:0 10px;
+  height:279px;
+}
+
+@media (max-width:707px) {
+  .word-target {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  width:100%;
+  margin:0 10px;
+}
+
+.user-greeting {
+  height:231px;
+  margin:20px 0px;
+}
+}
+
 </style>
+
+
+

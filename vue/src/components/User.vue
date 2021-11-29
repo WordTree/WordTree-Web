@@ -9,7 +9,7 @@
                  ></el-avatar>
             </div>
             <div class="greeting">
-                <span>{{`${getState}，${userName}。`}}</span>
+                <span>{{`${getState}，${userName}`}}</span>
             </div>
         </div>
         <hr>
@@ -73,6 +73,7 @@ export default {
 
     .user-greeting {
         display: flex;
+        align-items:center;
     }
 
     .greeting {
@@ -82,5 +83,11 @@ export default {
     }
     .greeting span {
         align-self: center;
+    }
+
+    @media (max-width:707px) {
+        .card {
+            margin:10px 0 0 0;
+        }
     }
 </style>
