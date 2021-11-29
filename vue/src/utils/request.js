@@ -12,8 +12,7 @@ const request = axios.create({
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
-    //
-    let userJson = sessionStorage.getItem("user");
+    let userJson = localStorage.getItem("user");
     if (userJson === null) {
         router.push("/login");
     }

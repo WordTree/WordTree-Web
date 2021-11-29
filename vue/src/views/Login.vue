@@ -17,12 +17,12 @@
         Login
       </div>
       <el-form :model="form" :rules="rules" ref="form" size="normal">
-        <el-form-item prop="username" style="padding-left: 43px">
+        <el-form-item prop="userID" style="padding-left: 43px">
           <el-input
-            placeholder="用户名"
+            placeholder="账号"
             prefix-icon="el-icon-user-solid"
             style="width: 90%"
-            v-model="form.username"
+            v-model="form.userID"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password" style="padding-left: 43px">
@@ -55,8 +55,8 @@ export default {
     return {
       form: {},
       rules: {
-        username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+        userID: [
+          { required: true, message: "请输入账号", trigger: "blur" },
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
@@ -64,7 +64,7 @@ export default {
   },
   created() {
     //每次跳转到登录界面则移除缓存的用户信息
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("user");
   },
   methods: {
     login() {
@@ -76,7 +76,9 @@ export default {
                 type: "success",
                 message: "登录成功！",
               });
-              sessionStorage.setItem("user", JSON.stringify(res.data)); //缓存用户信息
+
+              localStorage.setItem("user", JSON.stringify(res.data)); //缓存用户信息
+
               this.$router.push("/"); //登录成功
             } else {
               this.$message({

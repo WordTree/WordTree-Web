@@ -9,7 +9,7 @@
                  ></el-avatar>
             </div>
             <div class="greeting">
-                <span>{{`${getState}，${userName}。`}}</span>
+                <span>{{`${getState}，${userName}`}}</span>
             </div>
         </div>
         <hr>

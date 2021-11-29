@@ -73,5 +73,25 @@ public class ResolveJsonTest {
         }
 
     }
+
+    @Test
+    public void test(){
+        boolean isStudent = true;
+        int age = 22;
+        double discount = 0;
+        double order_price = 120;
+        double shipping = 20;
+        if ((isStudent) && (age <= 24)) {
+            if (order_price <= 100.00) {
+                discount = order_price * 0.1;
+            } else if (order_price > 100.00) {
+                discount = order_price * 0.15;
+            }
+        } else if (order_price > 50.00) {
+            discount = discount + shipping;
+        }
+
+        System.out.println(discount);
+    }
 }
 

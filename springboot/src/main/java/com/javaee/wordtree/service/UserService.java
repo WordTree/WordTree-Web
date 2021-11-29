@@ -24,6 +24,7 @@ public class UserService {
     public User loginVerify(User user){
         LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
         User result = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID, user.getUserID()).eq(User::getPassword, user.getPassword()));
+        result.setPassword(null);
         return result;
     }
 

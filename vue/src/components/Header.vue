@@ -4,7 +4,7 @@
       <div style="flex: 1"></div>
         <div class="drop-items">
           <el-dropdown>
-             <div class="user-image">
+             <div class="user-image" style="padding-top: 10px">
                 <el-avatar
                 :src="url"
                 shape="circle"
@@ -17,7 +17,7 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item divided>个人中心</el-dropdown-item>
-                <el-dropdown-item divided>退出登录</el-dropdown-item>
+                <el-dropdown-item @click="exit" divided>退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -30,6 +30,12 @@ export default {
     name: 'Header',
     props: {
       url:String,
+    },
+    methods:{
+        exit(){
+            this.$router.push("/login")
+
+        }
     }
 }
 </script>

@@ -17,12 +17,12 @@
           Register
         </div>
         <el-form :model="form" :rules="rules" ref="form" size="normal">
-          <el-form-item prop="username" style="padding-left:40px">
+          <el-form-item prop="userID" style="padding-left:40px">
             <el-input
-              placeholder="用户名"
+              placeholder="账号"
               prefix-icon="el-icon-user-solid"
               style="width: 90%"
-              v-model="form.username"
+              v-model="form.userID"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password" style="padding-left:40px">
@@ -62,7 +62,7 @@ export default {
     return {
       form: {},
       rules: {
-        username: [
+        userID: [
           { required: true, message: "请输入用户名", trigger: "blur" },
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
@@ -90,7 +90,8 @@ export default {
                 message: "注册成功！",
               });
               this.$router.push("/login"); //注册成功
-            } else {
+            }
+            else {
               this.$message({
                 type: "error",
                 message: res.msg,
