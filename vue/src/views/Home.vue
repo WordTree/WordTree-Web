@@ -122,7 +122,6 @@ export default {
     };
   },
   created() {
-    //
   },
 };
 </script>
@@ -177,11 +176,34 @@ export default {
 }
 
 .column-chart {
-  flex:1;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 6px;
+  border-color: transparent;
+  padding:15px;
 }
 
 .circle-chart {
   width:400px;
+  flex:0 0 auto;
+  margin-right: 50px;
+}
+
+@media (max-width:707px) {
+    .column-chart {
+  background-color: #fff;
+  border-radius: 6px;
+  border-color: transparent;
+  padding:15px;
+  width:100%;
+  margin: 0 10px;
+}
+
+.bottom-chart {
+  display:flex;
+  flex-wrap:wrap;
+  width:100%;
+}
 }
 
 </style>
