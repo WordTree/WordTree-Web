@@ -1,5 +1,5 @@
 <template>
-    <div id="container"></div>
+  <div id="container-column"></div>
 </template>
 
 <script>
@@ -11,24 +11,26 @@ export default {
   },
   mounted() {
     let data = this.data;
-    const column = new Column("container", {
+    const column = new Column("container-column", {
       data,
-      supportCSSTransform:"true",
+      supportCSSTransform: "true",
       xField: "date",
       yField: "value",
       seriesField: "type",
       isGroup: "true",
-      autoFit:"true",
-      forceFit:"true",
-      maxColumnWidth: 30,
+      autoFit: "true",
+      forceFit: "true",
+      colorField: "type",
+      color: ["#FC6404", "#FCAD05"],
+      // maxColumnWidth: 30,
       columnStyle: {
         radius: [20, 20, 0, 0],
         fillOpacity: 0.9,
       },
     });
-    column.on('container:onresize',()=>{
-      column.render();
-    })
+    // column.on('container:onresize',()=>{
+    //   column.render();
+    // })
     column.render();
   },
 };
@@ -38,8 +40,6 @@ export default {
 #container {
   width: 100%;
   min-height: 400px;
-  flex:1;
+  flex: 1;
 }
-
-
 </style>

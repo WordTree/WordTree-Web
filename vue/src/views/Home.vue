@@ -9,16 +9,22 @@
           :content="`${learnedWordCount} / ${totalWordCount} words`"
         />
       </div>
-        <div class="user-greeting">
-          <User :url="userImageUrl" :userName="userName" />
-        </div>
+      <div class="user-greeting">
+        <User :url="userImageUrl" :userName="userName" />
+      </div>
     </div>
     <div class="bottom-chart">
       <div class="column-chart">
-        <WordDataColumn :data="columnChartData"/>
+        <div class="column-caption">
+          <span class="caption-text">近七天学习统计</span>
+        </div>
+        <WordDataColumn :data="columnChartData" />
       </div>
       <div class="circle-chart">
-
+        <div class="circle-caption">
+          <span class="caption-text">单词统计</span>
+        </div>
+        <WordDataCircle :data="circleChartData" />
       </div>
     </div>
   </div>
@@ -30,11 +36,12 @@ import Header from "@/components/Header.vue";
 import TextCard from "@/components/TextCard.vue";
 import User from "@/components/User.vue";
 import WordDataColumn from "../components/WordDataColumn";
-
+import WordDataCircle from "@/components/WordDataCircle";
 export default {
   name: "Home",
   components: {
     WordDataColumn,
+    WordDataCircle,
     Header,
     TextCard,
     User,
@@ -47,82 +54,104 @@ export default {
       userImageUrl:
         "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       userName: "Lxy",
-      columnChartData:[
+      columnChartData: [
         {
-          "date":'11-24',
-          "value":40,
-          "type":"review"
+          date: "11-24",
+          value: 40,
+          type: "review",
         },
-                {
-          "date":'11-24',
-          "value":25,
-          "type":"learn"
+        {
+          date: "11-24",
+          value: 25,
+          type: "learn",
         },
-                {
-          "date":'11-25',
-          "value":40,
-          "type":"review"
+        {
+          date: "11-25",
+          value: 40,
+          type: "review",
         },
-                {
-          "date":'11-25',
-          "value":25,
-          "type":"learn"
+        {
+          date: "11-25",
+          value: 25,
+          type: "learn",
         },
-                {
-          "date":'11-26',
-          "value":40,
-          "type":"review"
+        {
+          date: "11-26",
+          value: 40,
+          type: "review",
         },
-                {
-          "date":'11-26',
-          "value":25,
-          "type":"learn"
+        {
+          date: "11-26",
+          value: 25,
+          type: "learn",
         },
-                {
-          "date":'11-27',
-          "value":40,
-          "type":"review"
+        {
+          date: "11-27",
+          value: 40,
+          type: "review",
         },
-                {
-          "date":'11-27',
-          "value":25,
-          "type":"learn"
+        {
+          date: "11-27",
+          value: 25,
+          type: "learn",
         },
-                {
-          "date":'11-28',
-          "value":40,
-          "type":"review"
+        {
+          date: "11-28",
+          value: 40,
+          type: "review",
         },
-                {
-          "date":'11-28',
-          "value":25,
-          "type":"learn"
+        {
+          date: "11-28",
+          value: 25,
+          type: "learn",
         },
-                {
-          "date":'11-29',
-          "value":40,
-          "type":"review"
+        {
+          date: "11-29",
+          value: 40,
+          type: "review",
         },
-                {
-          "date":'11-29',
-          "value":25,
-          "type":"learn"
+        {
+          date: "11-29",
+          value: 25,
+          type: "learn",
         },
-                {
-          "date":'11-30',
-          "value":40,
-          "type":"review"
+        {
+          date: "11-30",
+          value: 40,
+          type: "review",
         },
-                {
-          "date":'11-30',
-          "value":25,
-          "type":"learn"
-        }
+        {
+          date: "11-30",
+          value: 25,
+          type: "learn",
+        },
+      ],
+      circleChartData: [
+        {
+          type:"认识",
+          value:20
+        },
+        {
+          type:"了解",
+          value:20
+        },
+        {
+          type:"熟悉",
+          value:30
+        },
+        {
+          type:"掌握",
+          value:10
+        },
+        {
+          type:"烂熟于心",
+          value:20
+        },
       ],
     };
   },
-  created() {
-  },
+  created() {},
+
 };
 </script>
 
@@ -138,72 +167,96 @@ export default {
 .User {
   display: flex;
   flex-wrap: wrap-reverse;
-  height:auto;
+  height: auto;
 }
-
-
 
 .header {
-  height:50px;
+  height: 50px;
 }
 
 .user-greeting {
-  flex:1;
-  padding:0 10px;
-  height:279px;
+  flex: 1;
+  padding: 0 10px;
+  height: 279px;
 }
 
-@media (max-width:707px) {
+@media (max-width: 707px) {
   .word-target {
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  width:100%;
-  margin:0 10px;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 10px;
+  }
 
-.user-greeting {
-  height:231px;
-  margin:20px 0px;
+  .user-greeting {
+    height: 231px;
+    margin: 20px 0px;
+  }
 }
-}
-
 
 .bottom-chart {
-  display:flex;
-  flex-wrap:nowrap;
-  width:100%;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
 }
 
 .column-chart {
+  margin: 0 25px;
   width: 100%;
   background-color: #fff;
   border-radius: 6px;
   border-color: transparent;
-  padding:15px;
+  padding: 15px;
+  flex-shrink:2;
+}
+
+.column-chart:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 
 .circle-chart {
-  width:400px;
-  flex:0 0 auto;
-  margin-right: 50px;
-}
-
-@media (max-width:707px) {
-    .column-chart {
+  min-width: 500px;
+  margin: 0 25px 0 0;
+  width: 100%;
+  height: auto;
   background-color: #fff;
   border-radius: 6px;
   border-color: transparent;
-  padding:15px;
-  width:100%;
-  margin: 0 10px;
+  padding: 15px;
+  flex: 1;
 }
 
-.bottom-chart {
-  display:flex;
-  flex-wrap:wrap;
-  width:100%;
+.circle-chart:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
+
+@media (max-width: 707px) {
+  .column-chart {
+    background-color: #fff;
+    border-radius: 6px;
+    border-color: transparent;
+    padding: 15px;
+    width: 100%;
+    margin: 0 10px;
+  }
+
+  .circle-chart {
+    width:100%;
+    margin: 10px;
+  }
+
+  .bottom-chart {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+}
+
+.caption-text {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: rgb(89, 89, 89);
 }
 
 </style>
