@@ -16,7 +16,7 @@
                 </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item divided>个人中心</el-dropdown-item>
+                <el-dropdown-item divided><router-link to="Settings" style="text-decoration:none;color:inherit">个人设置</router-link></el-dropdown-item>
                 <el-dropdown-item @click="exit" divided>退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>

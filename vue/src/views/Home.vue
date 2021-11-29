@@ -94,73 +94,73 @@ export default {
       columnChartData: [
         {
           date: "11-24",
-          value: 40,
-          type: "review",
+          value: 0,
+          type: "Review",
         },
         {
           date: "11-24",
           value: 25,
-          type: "learn",
+          type: "Learn",
         },
         {
           date: "11-25",
           value: 40,
-          type: "review",
+          type: "Review",
         },
         {
           date: "11-25",
           value: 25,
-          type: "learn",
+          type: "Learn",
         },
         {
           date: "11-26",
           value: 40,
-          type: "review",
+          type: "Review",
         },
         {
           date: "11-26",
           value: 25,
-          type: "learn",
+          type: "Learn",
         },
         {
           date: "11-27",
           value: 40,
-          type: "review",
+          type: "Review",
         },
         {
           date: "11-27",
           value: 25,
-          type: "learn",
+          type: "Learn",
         },
         {
           date: "11-28",
           value: 40,
-          type: "review",
+          type: "Review",
         },
         {
           date: "11-28",
           value: 25,
-          type: "learn",
+          type: "Learn",
         },
         {
           date: "11-29",
           value: 40,
-          type: "review",
+          type: "Review",
         },
         {
           date: "11-29",
           value: 25,
-          type: "learn",
+          type: "Learn",
         },
         {
           date: "11-30",
           value: 40,
-          type: "review",
+          type: "Review",
         },
         {
           date: "11-30",
           value: 25,
-          type: "learn",
+          type: "Learn",
         },
       ],
       circleChartData: [
@@ -245,6 +245,7 @@ export default {
   flex: 1;
   padding: 0 10px;
   height: 279px;
+  margin-right:15px;
 }
 
 .bottom-chart {
@@ -254,7 +255,7 @@ export default {
 }
 
 .column-chart {
-  margin: 0 25px;
+  margin: 0 0 0 25px;
   width: 100%;
   background-color: #fff;
   border-radius: 6px;
