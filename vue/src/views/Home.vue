@@ -17,6 +17,9 @@
       <div class="column-chart">
         <WordDataColumn :data="columnChartData"/>
       </div>
+      <div class="circle-chart">
+
+      </div>
     </div>
   </div>
 </template>
@@ -27,7 +30,6 @@ import Header from "@/components/Header.vue";
 import TextCard from "@/components/TextCard.vue";
 import User from "@/components/User.vue";
 import WordDataColumn from "../components/WordDataColumn";
-import request from "../utils/request";
 
 export default {
   name: "Home",
@@ -39,13 +41,12 @@ export default {
   },
   data() {
     return {
-      user:{},    //用户信息
       reviewWordCount: 0,
       learnedWordCount: 0,
       totalWordCount: 0,
       userImageUrl:
         "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-      userName:"Lxy",
+      userName: "Lxy",
       columnChartData:[
         {
           "date":'11-24',
@@ -121,24 +122,7 @@ export default {
     };
   },
   created() {
-    this.refreshUser();
-    console.log(this.user.avator);
-    console.log(this.$data.userName);
-    console.log(this.$data.userImageUrl);
-    console.log(this.userName);
   },
-  methods:{
-    refreshUser() {
-      let userJson = localStorage.getItem("user");
-      if (!userJson) {
-        this.$router.push("/login");
-        return;
-      }
-      this.user = JSON.parse(userJson);
-      this.userImageUrl = this.user.avator;
-      this.userName = this.user.userName;
-    }
-  }
 };
 </script>
 
@@ -158,11 +142,6 @@ export default {
 }
 
 
-.bottom-chart {
-  display:flex;
-  flex-wrap:wrap;
-  width:100%;
-}
 
 .header {
   height:50px;
@@ -186,6 +165,44 @@ export default {
 .user-greeting {
   height:231px;
   margin:20px 0px;
+}
+}
+
+
+.bottom-chart {
+  display:flex;
+  flex-wrap:nowrap;
+  width:100%;
+}
+
+.column-chart {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 6px;
+  border-color: transparent;
+  padding:15px;
+}
+
+.circle-chart {
+  width:400px;
+  flex:0 0 auto;
+  margin-right: 50px;
+}
+
+@media (max-width:707px) {
+    .column-chart {
+  background-color: #fff;
+  border-radius: 6px;
+  border-color: transparent;
+  padding:15px;
+  width:100%;
+  margin: 0 10px;
+}
+
+.bottom-chart {
+  display:flex;
+  flex-wrap:wrap;
+  width:100%;
 }
 }
 
