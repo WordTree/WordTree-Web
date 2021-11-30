@@ -6,8 +6,13 @@ export default createStore({
       userImageUrl:'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
       userName:'Lxy'
     }
+    
   },
   mutations: {
+    setUser(state,user){
+      state.user.userImageUrl = user.avator;
+      state.user.userName = user.userName;
+    }
   },
   actions: {
   },

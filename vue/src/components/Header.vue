@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <span class="logo">WordTree</span>
+        <span class="logo"><router-link to="/" style="text-decoration:none;color:inherit">WordTree</router-link></span>
       <div style="flex: 1"></div>
         <div class="drop-items">
           <el-dropdown>
