@@ -70,6 +70,8 @@ import User from "@/components/User.vue";
 import WordDataColumn from "../components/WordDataColumn";
 import WordDataCircle from "@/components/WordDataCircle";
 import WordDataLine from "@/components/WordDataLine";
+import request from "../utils/request";
+import {Column, Line, Pie} from "@antv/g2plot";
 
 export default {
   name: "Home",
@@ -86,133 +88,46 @@ export default {
       reviewWordCount: 0,
       learnedWordCount: 0,
       totalWordCount: 0,
-      columnChartData: [
-        {
-          date: "11-24",
-          value: 0,
-          type: "Review",
-        },
-        {
-          date: "11-24",
-          value: 25,
-          type: "Learn",
-        },
-        {
-          date: "11-25",
-          value: 40,
-          type: "Review",
-        },
-        {
-          date: "11-25",
-          value: 25,
-          type: "Learn",
-        },
-        {
-          date: "11-26",
-          value: 40,
-          type: "Review",
-        },
-        {
-          date: "11-26",
-          value: 25,
-          type: "Learn",
-        },
-        {
-          date: "11-27",
-          value: 40,
-          type: "Review",
-        },
-        {
-          date: "11-27",
-          value: 25,
-          type: "Learn",
-        },
-        {
-          date: "11-28",
-          value: 40,
-          type: "Review",
-        },
-        {
-          date: "11-28",
-          value: 25,
-          type: "Learn",
-        },
-        {
-          date: "11-29",
-          value: 40,
-          type: "Review",
-        },
-        {
-          date: "11-29",
-          value: 25,
-          type: "Learn",
-        },
-        {
-          date: "11-30",
-          value: 40,
-          type: "Review",
-        },
-        {
-          date: "11-30",
-          value: 25,
-          type: "Learn",
-        },
-      ],
-      circleChartData: [
-        {
-          type: "认识",
-          value: 20,
-        },
-        {
-          type: "了解",
-          value: 20,
-        },
-        {
-          type: "熟悉",
-          value: 30,
-        },
-        {
-          type: "掌握",
-          value: 10,
-        },
-        {
-          type: "烂熟于心",
-          value: 20,
-        },
-      ],
-      lineChartData: [
-        {
-          date: "11-24",
-          time: 25,
-        },
-        {
-          date: "11-25",
-          time: 60,
-        },
-        {
-          date: "11-26",
-          time: 33,
-        },
-        {
-          date: "11-27",
-          time: 10,
-        },
-        {
-          date: "11-28",
-          time: 40,
-        },
-        {
-          date: "11-29",
-          time: 56,
-        },
-        {
-          date: "11-30",
-          time: 80,
-        },
-      ],
+      learningTimeCount: 0,
+      yesterdayTimeCount: 0,
+      weeklyTimeCount: 0,
+      columnChartData: [],   //柱状图数据
+      circleChartData: [],   //饼图数据
+      lineChartData: [],    //曲线图数据
+
+
     };
   },
-  created() {},
+
+  created() {
+    this.init();
+  },
+  methods:{
+    init(){
+      let userJson = localStorage.getItem("user");
+      if (!userJson) {
+        this.$router.push("/login");
+        return
+      }else{
+        let user = JSON.parse(userJson);
+        this.$store.commit('setUser',user);
+        request.get("/statistic/"+user.userID + "/" + user.targetBook).then(res => {
+          this.reviewWordCount = res.data.reviewWordCount;
+          this.learnedWordCount = res.data.learnedWordCount;
+          this.totalWordCount = res.data.totalWordCount;
+          this.columnChartData = res.data.columnChartData;
+          this.circleChartData = res.data.circleChartData;
+          this.lineChartData = res.data.lineChartData;
+          console.log(this.columnChartData);
+          console.log(this.circleChartData);
+          console.log(this.lineChartData);
+          // this.initColumnChart();
+          // this.initCircleChart();
+          // this.initLineChart();
+        })
+      }
+    },
+  },
   computed: {
     userImageUrl() {
       return this.$store.state.user.userImageUrl;
@@ -233,8 +148,6 @@ export default {
       return 0;
     }
 
-  },
-  methods: {
   },
 };
 </script>
@@ -391,6 +304,13 @@ export default {
   background-color: rgb(239, 242, 245);
   flex-direction: column;
 }
+
+.caption-text {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: rgb(89, 89, 89);
+}
+
 </style>
 
 

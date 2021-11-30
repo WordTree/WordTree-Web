@@ -15,7 +15,7 @@ import lombok.Data;
 public class Sentence {
 
     @TableId(value = "sentenceID",type = IdType.AUTO)
-    public int sentenceID;
+    private int sentenceID;
 
     // 英文句子
     private String enSentence;

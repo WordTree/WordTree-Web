@@ -15,7 +15,7 @@ import lombok.Data;
 public class Translation {
 
     @TableId(value = "translationID",type = IdType.AUTO)
-    public int translationID;
+    private int translationID;
 
     // 英文词意
     private String enTran;

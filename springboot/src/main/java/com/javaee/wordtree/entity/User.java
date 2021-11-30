@@ -16,18 +16,18 @@ public class User {
 
     //用户ID
     @TableId(value = "userID",type = IdType.INPUT)
-    String userID;
+    private String userID;
 
     //用户名称
-    String userName;
+    private String userName;
 
     //用户密码
-    String password;
+    private String password;
 
     //用户头像URL
-    String avator;
+    private String avator;
 
     //用户所选词书
-    String targetBook;
+    private String targetBook;
 
 }
