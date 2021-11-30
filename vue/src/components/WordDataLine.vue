@@ -5,16 +5,16 @@
 <script>
 import { Line } from "@antv/g2plot";
 
+var line = null;
+
 export default {
   name: "WordDataLine",
   props: {
     data: [],
   },
   mounted() {
-    let data = this.data;
-
-    const line = new Line("container-line", {
-      data,
+    line = new Line("container-line", {
+      data: this.$props.data,
       padding: "auto",
       xField: "date",
       yField: "time",
@@ -23,14 +23,17 @@ export default {
       yAxis: false,
       xAxis: false,
       lineStyle: {
-        lineWidth:1,
-        shadowColor:"blue",
-        shadowOffsetY:10,
-        shadowOffsetX:0,
-        shadowBlur:60
+        lineWidth: 1,
+        shadowColor: "blue",
+        shadowOffsetY: 10,
+        shadowOffsetX: 0,
+        shadowBlur: 60,
       },
     });
     line.render();
+  },
+  updated() {
+    line.changeData(this.$props.data);
   },
 };
 </script>

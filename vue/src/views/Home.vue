@@ -13,12 +13,7 @@
           <span style="font-size: 20px">min</span>
         </div>
         <div class="line-chart-container">
-<!--          <WordDataLine :data="lineChartData" />-->
-          <div>
-            <!-- 如果没数据就展示一个图标 -->
-            <div v-show="isDataLine" id="wordDataLine" style="width: 90%;max-height: 90px;"></div>
-            <empty v-show="!isDataLine" />
-          </div>
+          <WordDataLine :data="lineChartData" />
         </div>
         <div
           class="lone-chart-footer"
@@ -52,23 +47,13 @@
         <div class="column-caption">
           <span class="caption-text">近七天学习统计</span>
         </div>
-<!--        <WordDataColumn :data="columnChartData" />-->
-        <div>
-          <!-- 如果没数据就展示一个图标 -->
-          <div v-show="isDataColumn" id="wordDataColumn" style="width: 100%;min-height: 400px;flex: 1"></div>
-          <empty v-show="!isDataColumn" />
-        </div>
+        <WordDataColumn :data="columnChartData" />
       </div>
       <div class="circle-chart">
         <div class="circle-caption">
           <span class="caption-text">单词统计</span>
         </div>
-<!--        <WordDataCircle :data="circleChartData" />-->
-        <div>
-          <!-- 如果没数据就展示一个图标 -->
-          <div v-show="isDataCircle" id="wordDataCircle" style="width: 100%;min-height: 400px;flex: 1"></div>
-          <empty v-show="!isDataCircle" />
-        </div>
+        <WordDataCircle :data="circleChartData" />
       </div>
     </div>
     <div class="footer">
@@ -82,18 +67,18 @@
 import Header from "@/components/Header.vue";
 import TextCard from "@/components/TextCard.vue";
 import User from "@/components/User.vue";
-// import WordDataColumn from "../components/WordDataColumn";
-// import WordDataCircle from "@/components/WordDataCircle";
-// import WordDataLine from "@/components/WordDataLine";
+import WordDataColumn from "../components/WordDataColumn";
+import WordDataCircle from "@/components/WordDataCircle";
+import WordDataLine from "@/components/WordDataLine";
 import request from "../utils/request";
 import {Column, Line, Pie} from "@antv/g2plot";
 
 export default {
   name: "Home",
   components: {
-    // WordDataColumn,
-    // WordDataCircle,
-    // WordDataLine,
+    WordDataColumn,
+    WordDataCircle,
+    WordDataLine,
     Header,
     TextCard,
     User,
@@ -109,85 +94,15 @@ export default {
       columnChartData: [],   //柱状图数据
       circleChartData: [],   //饼图数据
       lineChartData: [],    //曲线图数据
-      columnChart:null,  //柱状图对象
-      circleChart:null,   //饼图对象
-      lineChart:null,   //曲线图对象
-      isDataColumn:true,  //柱状图是否存在数据
-      isDataCircle:true,  //饼图是否存在数据
-      isDataLine:true,    //曲线图是否存在数据
 
 
     };
   },
-  mounted() {
-    this.columnChart = new Column("wordDataColumn", {
-      data:this.columnChartData,
-      supportCSSTransform: "true",
-      xField: "date",
-      yField: "value",
-      seriesField: "type",
-      isGroup: "true",
-      autoFit: "true",
-      forceFit: "true",
-      colorField: "type",
-      color: ["#FC6404", "#FCAD05"],
-      // maxColumnWidth: 30,
-      columnStyle: {
-        radius: [20, 20, 0, 0],
-        fillOpacity: 0.9,
-      },
-    });
 
-    this.circleChart = new Pie("wordDataCircle", {
-      appendPadding: 10,
-      data:this.circleChartData,
-      angleField: "value",
-      colorField: "type",
-      radius: 0.8,
-      label: {
-        type: "outer",
-        content: "{name} {percentage}",
-      },
-      interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
-    });
-
-    this.lineChart = new Line("wordDataLine", {
-      data:this.lineChartData,
-      padding: "auto",
-      xField: "date",
-      yField: "time",
-      smooth: true,
-      grid: "null",
-      yAxis: false,
-      xAxis: false,
-      lineStyle: {
-        lineWidth:1,
-        shadowColor:"blue",
-        shadowOffsetY:10,
-        shadowOffsetX:0,
-        shadowBlur:60
-      },
-    });
-
-  },
   created() {
     this.init();
   },
   methods:{
-    initColumnChart(){
-      console.log("111111");
-      console.log(this.columnChartData);
-      this.columnChart.render();
-      this.columnChart.changeData(this.columnChartData);
-    },
-    initCircleChart(){
-      this.circleChart.render();
-      this.circleChart.changeData(this.circleChartData);
-    },
-    initLineChart(){
-      this.lineChart.render();
-      this.lineChart.changeData(this.lineChartData);
-    },
     init(){
       let userJson = localStorage.getItem("user");
       if (!userJson) {
@@ -206,21 +121,21 @@ export default {
           console.log(this.columnChartData);
           console.log(this.circleChartData);
           console.log(this.lineChartData);
-          this.initColumnChart();
-          this.initCircleChart();
-          this.initLineChart();
+          // this.initColumnChart();
+          // this.initCircleChart();
+          // this.initLineChart();
         })
       }
     },
   },
-  computed:{
-    userImageUrl(){
+  computed: {
+    userImageUrl() {
       return this.$store.state.user.userImageUrl;
     },
-    userName(){
+    userName() {
       return this.$store.state.user.userName;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -248,7 +163,7 @@ export default {
   flex: 1;
   padding: 0 10px;
   height: 279px;
-  margin-right:15px;
+  margin-right: 15px;
 }
 
 .bottom-chart {
@@ -369,7 +284,7 @@ export default {
   align-self: center;
   height: 200px;
   width: 100%;
-  position:relative;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
