@@ -48,9 +48,9 @@ export default {
   },
   data() {
     return {
-      reviewWordCount: 0,
-      learnedWordCount: 0,
-      totalWordCount: 0,
+      reviewWordCount: 0,  //今天需要复习的单词量
+      learnedWordCount: 0,  //已经学习的单词总量
+      totalWordCount: 0,  //需要学习的单词总量
       userImageUrl:
         "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       userName: "Lxy",
@@ -129,28 +129,48 @@ export default {
       circleChartData: [
         {
           type:"认识",
-          value:20
+          value:20,
+          phase:1
         },
         {
           type:"了解",
-          value:20
+          value:20,
+          phase:2
         },
         {
           type:"熟悉",
-          value:30
+          value:30,
+          phase:3
         },
         {
           type:"掌握",
-          value:10
+          value:10,
+          phase:4
         },
         {
           type:"烂熟于心",
-          value:20
+          value:20,
+          phase:5
         },
       ],
     };
   },
-  created() {},
+  created() {
+    this.refreshUser();
+  },
+  methods:{
+    refreshUser(){
+      let userJson = localStorage.getItem("user");
+      if (!userJson) {
+        this.$router.push("/login");
+        return
+      }else{
+        let user = JSON.parse(userJson);
+        this.userImageUrl = user.avator;
+        this.userName = user.userName;
+      }
+    }
+  }
 
 };
 </script>
@@ -161,7 +181,8 @@ export default {
   flex-direction: column;
   flex-wrap: nowrap;
   background-color: rgb(239, 242, 245);
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
 }
 
 .User {

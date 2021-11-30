@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javaee.wordtree.mapper.MmryRecordMapper">
+
+    <select id="findMmryPercentage" resultType="com.javaee.wordtree.common.CircleData" parameterType="String">
+        SELECT phase ,
+        CONVERT(100 * CAST(count(*) AS DECIMAL) / CAST((SELECT COUNT(*) FROM memory_record WHERE userID = #{userID}) AS DECIMAL), DECIMAL(5,1)) AS value
+        FROM memory_record
+        WHERE userID = #{userID}
+        GROUP BY phase
+    </select>
+
+    <select id="findNeedReviewWordCount" resultType="int" parameterType="String">
+        select COUNT(*) from memory_record
+        WHERE userID = #{userID} and CURRENT_DATE() >= next_mmry_time
+    </select>
+</mapper>

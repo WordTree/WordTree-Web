@@ -16,7 +16,7 @@ import lombok.Data;
 public class Phrase {
 
     @TableId(value = "phraseID",type = IdType.AUTO)
-    public int phraseID;
+    private int phraseID;
 
     // 英语短语
     private String enPhrase;
