@@ -2,6 +2,40 @@
   <div class="home">
     <div class="header"><Header :url="userImageUrl" /></div>
     <div class="User">
+      <div class="line-chart">
+        <div class="line-caption" style="margin: 20px 20px 0px 20px">
+          <span class="caption-text"> 今日学习时间 </span>
+        </div>
+        <div class="line-chart-content">
+          <span style="font-size: 33px; padding-bottom: 0px; margin: 10px">
+            {{ learningTimeCount }}
+          </span>
+          <span style="font-size: 20px">min</span>
+        </div>
+        <div class="line-chart-container">
+<!--          <WordDataLine :data="lineChartData" />-->
+          <div>
+            <!-- 如果没数据就展示一个图标 -->
+            <div v-show="isDataLine" id="wordDataLine" style="width: 90%;max-height: 90px;"></div>
+            <empty v-show="!isDataLine" />
+          </div>
+        </div>
+        <div
+          class="lone-chart-footer"
+          style="
+            margin-bottom: 0;
+            display: flex;
+            justify-content: space-between;
+          "
+        >
+          <span class="caption-text"
+            >昨日学习时长：{{ yesterdayTimeCount }} min</span
+          >
+          <span class="caption-text" style="margin-right: 20px"
+            >近七日学习时长：{{ weeklyTimeCount }} min</span
+          >
+        </div>
+      </div>
       <div class="word-target">
         <text-card title="复习计划" :content="`${reviewWordCount} words`" />
         <text-card
@@ -18,14 +52,27 @@
         <div class="column-caption">
           <span class="caption-text">近七天学习统计</span>
         </div>
-        <WordDataColumn :data="columnChartData" />
+<!--        <WordDataColumn :data="columnChartData" />-->
+        <div>
+          <!-- 如果没数据就展示一个图标 -->
+          <div v-show="isDataColumn" id="wordDataColumn" style="width: 100%;min-height: 400px;flex: 1"></div>
+          <empty v-show="!isDataColumn" />
+        </div>
       </div>
       <div class="circle-chart">
         <div class="circle-caption">
           <span class="caption-text">单词统计</span>
         </div>
-        <WordDataCircle :data="circleChartData" />
+<!--        <WordDataCircle :data="circleChartData" />-->
+        <div>
+          <!-- 如果没数据就展示一个图标 -->
+          <div v-show="isDataCircle" id="wordDataCircle" style="width: 100%;min-height: 400px;flex: 1"></div>
+          <empty v-show="!isDataCircle" />
+        </div>
       </div>
+    </div>
+    <div class="footer">
+      <a href="https://github.com/WordTree/WordTree-Web">@WordTree</a>
     </div>
   </div>
 </template>
@@ -35,143 +82,145 @@
 import Header from "@/components/Header.vue";
 import TextCard from "@/components/TextCard.vue";
 import User from "@/components/User.vue";
-import WordDataColumn from "../components/WordDataColumn";
-import WordDataCircle from "@/components/WordDataCircle";
+// import WordDataColumn from "../components/WordDataColumn";
+// import WordDataCircle from "@/components/WordDataCircle";
+// import WordDataLine from "@/components/WordDataLine";
+import request from "../utils/request";
+import {Column, Line, Pie} from "@antv/g2plot";
+
 export default {
   name: "Home",
   components: {
-    WordDataColumn,
-    WordDataCircle,
+    // WordDataColumn,
+    // WordDataCircle,
+    // WordDataLine,
     Header,
     TextCard,
     User,
   },
   data() {
     return {
-      reviewWordCount: 0,  //今天需要复习的单词量
-      learnedWordCount: 0,  //已经学习的单词总量
-      totalWordCount: 0,  //需要学习的单词总量
-      userImageUrl:
-        "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-      userName: "Lxy",
-      columnChartData: [
-        {
-          date: "11-24",
-          value: 40,
-          type: "review",
-        },
-        {
-          date: "11-24",
-          value: 25,
-          type: "learn",
-        },
-        {
-          date: "11-25",
-          value: 40,
-          type: "review",
-        },
-        {
-          date: "11-25",
-          value: 25,
-          type: "learn",
-        },
-        {
-          date: "11-26",
-          value: 40,
-          type: "review",
-        },
-        {
-          date: "11-26",
-          value: 25,
-          type: "learn",
-        },
-        {
-          date: "11-27",
-          value: 40,
-          type: "review",
-        },
-        {
-          date: "11-27",
-          value: 25,
-          type: "learn",
-        },
-        {
-          date: "11-28",
-          value: 40,
-          type: "review",
-        },
-        {
-          date: "11-28",
-          value: 25,
-          type: "learn",
-        },
-        {
-          date: "11-29",
-          value: 40,
-          type: "review",
-        },
-        {
-          date: "11-29",
-          value: 25,
-          type: "learn",
-        },
-        {
-          date: "11-30",
-          value: 40,
-          type: "review",
-        },
-        {
-          date: "11-30",
-          value: 25,
-          type: "learn",
-        },
-      ],
-      circleChartData: [
-        {
-          type:"认识",
-          value:20,
-          phase:1
-        },
-        {
-          type:"了解",
-          value:20,
-          phase:2
-        },
-        {
-          type:"熟悉",
-          value:30,
-          phase:3
-        },
-        {
-          type:"掌握",
-          value:10,
-          phase:4
-        },
-        {
-          type:"烂熟于心",
-          value:20,
-          phase:5
-        },
-      ],
+      reviewWordCount: 0,
+      learnedWordCount: 0,
+      totalWordCount: 0,
+      learningTimeCount: 0,
+      yesterdayTimeCount: 0,
+      weeklyTimeCount: 0,
+      columnChartData: [],   //柱状图数据
+      circleChartData: [],   //饼图数据
+      lineChartData: [],    //曲线图数据
+      columnChart:null,  //柱状图对象
+      circleChart:null,   //饼图对象
+      lineChart:null,   //曲线图对象
+      isDataColumn:true,  //柱状图是否存在数据
+      isDataCircle:true,  //饼图是否存在数据
+      isDataLine:true,    //曲线图是否存在数据
+
+
     };
   },
+  mounted() {
+    this.columnChart = new Column("wordDataColumn", {
+      data:this.columnChartData,
+      supportCSSTransform: "true",
+      xField: "date",
+      yField: "value",
+      seriesField: "type",
+      isGroup: "true",
+      autoFit: "true",
+      forceFit: "true",
+      colorField: "type",
+      color: ["#FC6404", "#FCAD05"],
+      // maxColumnWidth: 30,
+      columnStyle: {
+        radius: [20, 20, 0, 0],
+        fillOpacity: 0.9,
+      },
+    });
+
+    this.circleChart = new Pie("wordDataCircle", {
+      appendPadding: 10,
+      data:this.circleChartData,
+      angleField: "value",
+      colorField: "type",
+      radius: 0.8,
+      label: {
+        type: "outer",
+        content: "{name} {percentage}",
+      },
+      interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
+    });
+
+    this.lineChart = new Line("wordDataLine", {
+      data:this.lineChartData,
+      padding: "auto",
+      xField: "date",
+      yField: "time",
+      smooth: true,
+      grid: "null",
+      yAxis: false,
+      xAxis: false,
+      lineStyle: {
+        lineWidth:1,
+        shadowColor:"blue",
+        shadowOffsetY:10,
+        shadowOffsetX:0,
+        shadowBlur:60
+      },
+    });
+
+  },
   created() {
-    this.refreshUser();
+    this.init();
   },
   methods:{
-    refreshUser(){
+    initColumnChart(){
+      console.log("111111");
+      console.log(this.columnChartData);
+      this.columnChart.render();
+      this.columnChart.changeData(this.columnChartData);
+    },
+    initCircleChart(){
+      this.circleChart.render();
+      this.circleChart.changeData(this.circleChartData);
+    },
+    initLineChart(){
+      this.lineChart.render();
+      this.lineChart.changeData(this.lineChartData);
+    },
+    init(){
       let userJson = localStorage.getItem("user");
       if (!userJson) {
         this.$router.push("/login");
         return
       }else{
         let user = JSON.parse(userJson);
-        this.userImageUrl = user.avator;
-        this.userName = user.userName;
+        this.$store.commit('setUser',user);
+        request.get("/statistic/"+user.userID + "/" + user.targetBook).then(res => {
+          this.reviewWordCount = res.data.reviewWordCount;
+          this.learnedWordCount = res.data.learnedWordCount;
+          this.totalWordCount = res.data.totalWordCount;
+          this.columnChartData = res.data.columnChartData;
+          this.circleChartData = res.data.circleChartData;
+          this.lineChartData = res.data.lineChartData;
+          console.log(this.columnChartData);
+          console.log(this.circleChartData);
+          console.log(this.lineChartData);
+          this.initColumnChart();
+          this.initCircleChart();
+          this.initLineChart();
+        })
       }
+    },
+  },
+  computed:{
+    userImageUrl(){
+      return this.$store.state.user.userImageUrl;
+    },
+    userName(){
+      return this.$store.state.user.userName;
     }
   }
-
 };
 </script>
 
@@ -199,6 +248,80 @@ export default {
   flex: 1;
   padding: 0 10px;
   height: 279px;
+  margin-right:15px;
+}
+
+.bottom-chart {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.column-chart {
+  margin: 0 0 0 25px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 6px;
+  border-color: transparent;
+  padding: 15px;
+  flex-shrink: 2;
+}
+
+.column-chart:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.circle-chart {
+  min-width: 500px;
+  margin: 0 25px;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  border-radius: 6px;
+  border-color: transparent;
+  padding: 15px;
+  flex: 1;
+}
+
+.circle-chart:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.line-chart {
+  height: 229px;
+  margin: 25px 0px 25px 25px;
+  border-radius: 6px;
+  padding: 0px;
+  max-width: 440px;
+  max-height: 229px;
+  border-color: transparent;
+  flex: 1;
+  background-color: #fff;
+}
+
+.line-chart:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.caption-text {
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: rgb(89, 89, 89);
+}
+
+.line-chart-content {
+  padding: 5px 30px;
+}
+
+.line-chart-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
 }
 
 @media (max-width: 707px) {
@@ -214,45 +337,7 @@ export default {
     height: 231px;
     margin: 20px 0px;
   }
-}
 
-.bottom-chart {
-  display: flex;
-  flex-wrap: nowrap;
-  width: 100%;
-}
-
-.column-chart {
-  margin: 0 25px;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 6px;
-  border-color: transparent;
-  padding: 15px;
-  flex-shrink:2;
-}
-
-.column-chart:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-}
-
-.circle-chart {
-  min-width: 500px;
-  margin: 0 25px 0 0;
-  width: 100%;
-  height: auto;
-  background-color: #fff;
-  border-radius: 6px;
-  border-color: transparent;
-  padding: 15px;
-  flex: 1;
-}
-
-.circle-chart:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-}
-
-@media (max-width: 707px) {
   .column-chart {
     background-color: #fff;
     border-radius: 6px;
@@ -263,7 +348,7 @@ export default {
   }
 
   .circle-chart {
-    width:100%;
+    width: 100%;
     margin: 10px;
   }
 
@@ -272,6 +357,24 @@ export default {
     flex-wrap: wrap;
     width: 100%;
   }
+
+  .line-chart {
+    width: 100%;
+    margin: 10px;
+    align-self: center;
+    max-width: none;
+  }
+}
+.footer {
+  align-self: center;
+  height: 200px;
+  width: 100%;
+  position:relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: rgb(239, 242, 245);
+  flex-direction: column;
 }
 
 .caption-text {

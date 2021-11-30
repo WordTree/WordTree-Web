@@ -5,25 +5,31 @@
 <script>
 import { Pie } from "@antv/g2plot";
 
+const piePlot = new Pie("container-circle", {
+  appendPadding: 10,
+  data,
+  angleField: "value",
+  colorField: "type",
+  radius: 0.8,
+  label: {
+    type: "outer",
+    content: "{name} {percentage}",
+  },
+  interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
+});
+
 export default {
   name: "WordDataCircle",
+
   props: {
     data: [],
   },
+  methods:{
+    changeData(newData){
+    }
+  },
   mounted() {
-    let data = this.data;
-    const piePlot = new Pie("container-circle", {
-      appendPadding: 10,
-      data,
-      angleField: "value",
-      colorField: "type",
-      radius: 0.8,
-      label: {
-        type: "outer",
-        content: "{name} {percentage}",
-      },
-      interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
-    });
+    piePlot.data = this.data;
     piePlot.render();
   },
 };
