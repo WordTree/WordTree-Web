@@ -4,15 +4,17 @@
 
 <script>
 import { Column } from "@antv/g2plot";
+
+var column = null;
+
 export default {
   name: "WordDataColumn",
   props: {
     data: [],
   },
   mounted() {
-    let data = this.data;
-    const column = new Column("container-column", {
-      data,
+    column = new Column("container-column", {
+      data: this.$props.data,
       supportCSSTransform: "true",
       xField: "date",
       yField: "value",
@@ -28,10 +30,10 @@ export default {
         fillOpacity: 0.9,
       },
     });
-    // column.on('container:onresize',()=>{
-    //   column.render();
-    // })
     column.render();
+  },
+  updated() {
+    column.changeData(this.$props.data);
   },
 };
 </script>

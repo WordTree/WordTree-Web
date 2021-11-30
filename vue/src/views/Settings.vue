@@ -1,8 +1,9 @@
 <template>
-  <div class="setting-page">
     <div class="header">
       <Header :url="userImageUrl" />
     </div>
+  <div class="setting-page">
+
     <div class="mainbody">
       <div class="form-container">
         <el-form
@@ -12,62 +13,15 @@
           label-width="120px"
           class="demo-ruleForm"
         >
-          <el-form-item label="用户" prop="name">
+          <el-form-item label="用户名" prop="name">
             <el-input v-model="FormData.name"></el-input>
           </el-form-item>
-          <el-form-item label="Activity zone" prop="region">
-            <el-select v-model="FormData.region" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai"></el-option>
-              <el-option label="Zone two" value="beijing"></el-option>
+          <el-form-item label="目标词书" prop="vocabulary">
+            <el-select v-model="FormData.vocabulary" placeholder="CET-4">
+              <el-option label="高考" value="GaoZhongluan_2"></el-option>
+              <el-option label="CET-4" value="CET4luan_1"></el-option>
+              <el-option label="CET-6" value="CET6luan_1"></el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="Activity time" required>
-            <el-col :span="11">
-              <el-form-item prop="date1">
-                <el-date-picker
-                  v-model="FormData.date1"
-                  type="date"
-                  placeholder="Pick a date"
-                  style="width: 100%"
-                ></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col class="line" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-form-item prop="date2">
-                <el-time-picker
-                  v-model="FormData.date2"
-                  placeholder="Pick a time"
-                  style="width: 100%"
-                ></el-time-picker>
-              </el-form-item>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="Instant delivery" prop="delivery">
-            <el-switch v-model="FormData.delivery"></el-switch>
-          </el-form-item>
-          <el-form-item label="Activity type" prop="type">
-            <el-checkbox-group v-model="FormData.type">
-              <el-checkbox label="Online activities" name="type"></el-checkbox>
-              <el-checkbox
-                label="Promotion activities"
-                name="type"
-              ></el-checkbox>
-              <el-checkbox label="Offline activities" name="type"></el-checkbox>
-              <el-checkbox
-                label="Simple brand exposure"
-                name="type"
-              ></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="Resources" prop="resource">
-            <el-radio-group v-model="FormData.resource">
-              <el-radio label="Sponsorship"></el-radio>
-              <el-radio label="Venue"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="Activity form" prop="desc">
-            <el-input v-model="FormData.desc" type="textarea"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')"
@@ -92,10 +46,7 @@ export default {
     return {
       FormData: {
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
+        vocabulary: "",
         type: [],
         resource: "",
         desc: "",
@@ -195,9 +146,7 @@ export default {
   flex-direction: column;
   height: 100%;
   min-height: 100vh;
-}
-.header {
-  margin-bottom: 40px;
+  justify-content: center;
 }
 
 .mainbody {

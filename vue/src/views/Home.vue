@@ -86,9 +86,9 @@ export default {
       reviewWordCount: 0,
       learnedWordCount: 0,
       totalWordCount: 0,
-      learningTimeCount: 0,
-      yesterdayTimeCount: 0,
-      weeklyTimeCount: 0,
+      learningTimeCount: 0, //
+      yesterdayTimeCount: 0, //
+      weeklyTimeCount: 0, //
       columnChartData: [
         {
           date: "11-24",
@@ -215,16 +215,17 @@ export default {
       ],
     };
   },
-  created() {
-  },
-  computed:{
-    userImageUrl(){
+  created() {},
+  computed: {
+    userImageUrl() {
       return this.$store.state.user.userImageUrl;
     },
-    userName(){
+    userName() {
       return this.$store.state.user.userName;
-    }
-  }
+    },
+  },
+  methods: {
+  },
 };
 </script>
 
@@ -252,7 +253,7 @@ export default {
   flex: 1;
   padding: 0 10px;
   height: 279px;
-  margin-right:15px;
+  margin-right: 15px;
 }
 
 .bottom-chart {
@@ -373,7 +374,7 @@ export default {
   align-self: center;
   height: 200px;
   width: 100%;
-  position:relative;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;

@@ -5,16 +5,17 @@
 <script>
 import { Pie } from "@antv/g2plot";
 
+var piePlot = null;
+
 export default {
   name: "WordDataCircle",
   props: {
     data: [],
   },
   mounted() {
-    let data = this.data;
-    const piePlot = new Pie("container-circle", {
+    piePlot = new Pie("container-circle", {
       appendPadding: 10,
-      data,
+      data: this.$props.data,
       angleField: "value",
       colorField: "type",
       radius: 0.8,
@@ -25,6 +26,9 @@ export default {
       interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
     });
     piePlot.render();
+  },
+  updated() {
+    piePlot.changeData(this.$props.data);
   },
 };
 </script>
