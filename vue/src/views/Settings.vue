@@ -1,9 +1,8 @@
 <template>
-    <div class="header">
-      <Header :url="userImageUrl" />
-    </div>
+  <div class="header">
+    <Header :url="userImageUrl" />
+  </div>
   <div class="setting-page">
-
     <div class="mainbody">
       <div class="form-container">
         <el-form
@@ -11,7 +10,7 @@
           :model="FormData"
           :rules="rules"
           label-width="120px"
-          class="demo-ruleForm"
+          class="Form"
         >
           <el-form-item label="用户名" prop="name">
             <el-input v-model="FormData.name"></el-input>
@@ -23,11 +22,29 @@
               <el-option label="CET-6" value="CET6luan_1"></el-option>
             </el-select>
           </el-form-item>
+                
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')"
+      <span>头像</span>
+            <el-upload
+              class="avatar-uploader"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+            >
+              <img
+                v-if="FormData.imageUrl"
+                :src="FormData.imageUrl"
+                class="avatar"
+              />
+              <el-icon v-else class="avatar-uploader-icon"><plus /></el-icon>
+            </el-upload>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('Form')"
               >Create</el-button
             >
-            <el-button @click="resetForm('ruleForm')">Reset</el-button>
+            <el-button @click="resetForm('Form')">Reset</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -37,77 +54,39 @@
 
 <script>
 import Header from "@/components/Header.vue";
+import { Plus } from "@element-plus/icons";
 export default {
   name: "Settings",
   components: {
     Header,
+    Plus,
   },
   data() {
     return {
       FormData: {
         name: "",
         vocabulary: "",
-        type: [],
-        resource: "",
-        desc: "",
+        imageUrl: "",
       },
       rules: {
         name: [
           {
             required: true,
-            message: "Please input Activity name",
+            message: "Please input user name",
             trigger: "blur",
           },
           {
             min: 3,
-            max: 5,
-            message: "Length should be 3 to 5",
+            max: 8,
+            message: "Length should be 3 to 8",
             trigger: "blur",
           },
         ],
-        region: [
+        vocabulary: [
           {
             required: true,
-            message: "Please select Activity zone",
+            message: "Please select target vocabulary",
             trigger: "change",
-          },
-        ],
-        date1: [
-          {
-            type: "date",
-            required: true,
-            message: "Please pick a date",
-            trigger: "change",
-          },
-        ],
-        date2: [
-          {
-            type: "date",
-            required: true,
-            message: "Please pick a time",
-            trigger: "change",
-          },
-        ],
-        type: [
-          {
-            type: "array",
-            required: true,
-            message: "Please select at least one activity type",
-            trigger: "change",
-          },
-        ],
-        resource: [
-          {
-            required: true,
-            message: "Please select activity resource",
-            trigger: "change",
-          },
-        ],
-        desc: [
-          {
-            required: true,
-            message: "Please input activity form",
-            trigger: "blur",
           },
         ],
       },
@@ -134,6 +113,21 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("Avatar picture must be JPG format!");
+      }
+      if (!isLt2M) {
+        this.$message.error("Avatar picture size can not exceed 2MB!");
+      }
+      return isJPG && isLt2M;
     },
   },
 };
@@ -166,5 +160,36 @@ export default {
   border-radius: 50px;
   box-shadow: 20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff;
   padding: 20px;
+}
+
+.Form{
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+}
+.avatar-uploader {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
+.avatar-uploader-icon svg {
+  margin-top: 74px; /* (178px - 28px) / 2 - 1px */
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

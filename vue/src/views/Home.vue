@@ -86,9 +86,6 @@ export default {
       reviewWordCount: 0,
       learnedWordCount: 0,
       totalWordCount: 0,
-      learningTimeCount: 0, //
-      yesterdayTimeCount: 0, //
-      weeklyTimeCount: 0, //
       columnChartData: [
         {
           date: "11-24",
@@ -223,6 +220,19 @@ export default {
     userName() {
       return this.$store.state.user.userName;
     },
+    yesterdayTimeCount(){
+      return 0;
+    },
+    weeklyTimeCount(){
+      let sum = 0;
+      for(const item of this.$data.lineChartData)
+        sum += item.time;
+      return sum;
+    },
+    learningTimeCount(){
+      return 0;
+    }
+
   },
   methods: {
   },
