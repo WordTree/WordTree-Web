@@ -70,6 +70,7 @@ import User from "@/components/User.vue";
 import WordDataColumn from "../components/WordDataColumn";
 import WordDataCircle from "@/components/WordDataCircle";
 import WordDataLine from "@/components/WordDataLine";
+
 export default {
   name: "Home",
   components: {
@@ -88,9 +89,6 @@ export default {
       learningTimeCount: 0,
       yesterdayTimeCount: 0,
       weeklyTimeCount: 0,
-      userImageUrl:
-        "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-      userName: "Lxy",
       columnChartData: [
         {
           date: "11-24",
@@ -217,7 +215,16 @@ export default {
       ],
     };
   },
-  created() {},
+  created() {
+  },
+  computed:{
+    userImageUrl(){
+      return this.$store.state.user.userImageUrl;
+    },
+    userName(){
+      return this.$store.state.user.userName;
+    }
+  }
 };
 </script>
 
