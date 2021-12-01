@@ -38,8 +38,26 @@ public class UserService {
             userMapper.insert(user);
     }
 
+    public void updateUser(User user){
+        LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
+        User oringinalUser = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID, user.getUserID()));
+        user.setPassword(oringinalUser.getPassword());
+        userMapper.updateById(user);
+    }
 
+    public void updatePassword(String userID, String password, String newPassword) throws Exception {
+        LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
+        User user = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID,userID));
 
+        if(!user.getPassword().equals(password))
+            throw new Exception("输入的原密码错误");
+        user.setPassword(newPassword);
+        userMapper.updateById(user);
+    }
 
+    public User getUserByID(String userID) {
+        LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
+        return userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID,userID));
 
+    }
 }

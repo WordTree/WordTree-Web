@@ -4,7 +4,7 @@
       <div style="flex: 1"></div>
         <div class="drop-items">
           <el-dropdown>
-             <div class="user-image" style="padding-top: 10px">
+             <div class="user-image" type="border-card" style="padding-top: 10px" >
                 <el-avatar
                 :src="url"
                 shape="circle"

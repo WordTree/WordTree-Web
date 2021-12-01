@@ -13,8 +13,14 @@ request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
     let userJson = localStorage.getItem("user");
+    let user = JSON.parse(userJson);
     if (userJson === null) {
         router.push("/login");
+    }
+    else if (user.userName==null || user.targetBook==null){
+        console.log("进入");
+        console.log(userJson.userName,userJson.targetBook);
+        router.push("/settings");
     }
 
     return config

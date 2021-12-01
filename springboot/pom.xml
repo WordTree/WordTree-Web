@@ -15,6 +15,7 @@
     <description>Project for Spring Boot as JavaEE Homework</description>
     <properties>
         <java.version>11</java.version>
+
     </properties>
     <dependencies>
         <dependency>

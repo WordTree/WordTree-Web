@@ -94,8 +94,6 @@ export default {
       columnChartData: [],   //柱状图数据
       circleChartData: [],   //饼图数据
       lineChartData: [],    //曲线图数据
-
-
     };
   },
 
@@ -130,7 +128,7 @@ export default {
   },
   computed: {
     userImageUrl() {
-      return this.$store.state.user.userImageUrl;
+      return this.$store.getters.userImageUrl;
     },
     userName() {
       return this.$store.state.user.userName;

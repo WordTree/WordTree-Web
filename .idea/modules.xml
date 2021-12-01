@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/WordTree-Web.iml" filepath="$PROJECT_DIR$/.idea/WordTree-Web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springboot/wordtree.iml" filepath="$PROJECT_DIR$/springboot/wordtree.iml" />
     </modules>
   </component>
 </project>

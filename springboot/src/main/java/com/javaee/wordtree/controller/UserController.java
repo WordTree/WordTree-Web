@@ -4,10 +4,7 @@ import com.javaee.wordtree.common.Result;
 import com.javaee.wordtree.entity.User;
 import com.javaee.wordtree.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -44,8 +41,28 @@ public class UserController {
         }
     }
 
+    @PutMapping
+    public Result<?> updateUser(@RequestBody User user){
+        userService.updateUser(user);
+        return Result.success();
+    }
 
+    @GetMapping()
+    public Result<?> updatePassword(@RequestParam String userID,
+                                    @RequestParam String password,
+                                    @RequestParam String newPassword){
+        try {
+            userService.updatePassword(userID,password,newPassword);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error("-1",e.getMessage());
+        }
+    }
 
-
+    @GetMapping("/{userID}")
+    public Result<?> getUser(@PathVariable String userID){
+        User result = userService.getUserByID(userID);
+        return Result.success(result);
+    }
 
 }

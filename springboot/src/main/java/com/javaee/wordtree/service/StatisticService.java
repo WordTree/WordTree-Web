@@ -11,7 +11,6 @@ import com.javaee.wordtree.entity.Word;
 import com.javaee.wordtree.mapper.DateRecordMapper;
 import com.javaee.wordtree.mapper.MmryRecordMapper;
 import com.javaee.wordtree.mapper.WordMapper;
-import javafx.scene.shape.Line;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
