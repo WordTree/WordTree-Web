@@ -138,7 +138,7 @@ export default {
       return sum;
     },
     learningTimeCount(){
-      return this.$data.lineChartData.time;
+      return this.$data.lineChartData[5].time;
     }
 
   },
