@@ -89,8 +89,6 @@ export default {
       learnedWordCount: 0,
       totalWordCount: 0,
       learningTimeCount: 0,
-      yesterdayTimeCount: 0,
-      weeklyTimeCount: 0,
       columnChartData: [],   //柱状图数据
       circleChartData: [],   //饼图数据
       lineChartData: [],    //曲线图数据
@@ -140,7 +138,7 @@ export default {
       return sum;
     },
     learningTimeCount(){
-      return 0;
+      return this.$data.lineChartData.time;
     }
 
   },
