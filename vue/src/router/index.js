@@ -3,7 +3,7 @@ import Home from "../views/Home";
 import Login from "../views/Login";
 import Register from "../views/Register";
 import Settings from "../views/Settings.vue"
-
+import Learning from '../views/Leaning.vue'
 const routes = [
   {
     path: '/',
@@ -24,6 +24,11 @@ const routes = [
     path:"/settings",
     name: 'Settings',
     component:Settings
+  },
+  {
+    path: "/learning",
+    name: 'Learning',
+    component: Learning
   }
 ]
 

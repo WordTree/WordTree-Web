@@ -32,10 +32,10 @@
         </div>
       </div>
       <div class="word-target">
-        <text-card title="复习计划" :content="`${reviewWordCount} words`" />
+        <text-card title="复习计划" :content="`${reviewWordCount} Words`" />
         <text-card
           title="学习进度"
-          :content="`${learnedWordCount} / ${totalWordCount} words`"
+          :content="`${learnedWordCount} / ${totalWordCount} Words`"
         />
       </div>
       <div class="user-greeting">
@@ -119,9 +119,6 @@ export default {
           console.log(this.columnChartData);
           console.log(this.circleChartData);
           console.log(this.lineChartData);
-          // this.initColumnChart();
-          // this.initCircleChart();
-          // this.initLineChart();
         })
       }
     },
@@ -134,7 +131,7 @@ export default {
       return this.$store.state.user.userName;
     },
     yesterdayTimeCount(){
-      return 0;
+      return this.$data.lineChartData[5].time;
     },
     weeklyTimeCount(){
       let sum = 0;
