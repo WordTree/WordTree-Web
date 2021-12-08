@@ -14,6 +14,19 @@
 
     <select id="findNeedReviewWordCount" resultType="int" parameterType="String">
         select COUNT(*) from memory_record
-        WHERE userID = #{userID} and CURRENT_DATE() >= next_mmry_time
+        WHERE userID = #{userID} and CURRENT_DATE() >= next_mmry_time and phase &lt; 6
     </select>
+
+
+    <select id="findLearnedWordCount" resultType="int" parameterType="String">
+        select COUNT(*) from memory_record as mr
+        left outer join `user` as u on mr.userID = u.userID
+        where mr.userID = #{userID} and mr.wordID in (select word.wordID from word where word.belong_book =  u.target_book)
+    </select>
+
+    <select id="findNeedReviewWordsID" resultType="int" parameterType="String">
+        select wordID from memory_record
+        WHERE userID = #{userID} and CURRENT_DATE() >= next_mmry_time and phase &lt; 6
+    </select>
+
 </mapper>

@@ -30,4 +30,7 @@ public class User {
     //用户所选词书
     private String targetBook;
 
+    //用户每组学习单词量
+    private int needCount;
+
 }

@@ -21,6 +21,11 @@ public class UserService {
     private UserMapper userMapper;
 
 
+    /**
+     * 登录验证业务
+     * @param user
+     * @return 返回登录用户的信息
+     */
     public User loginVerify(User user){
         LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
         User result = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID, user.getUserID()).eq(User::getPassword, user.getPassword()));
@@ -28,6 +33,11 @@ public class UserService {
         return result;
     }
 
+    /**
+     * 注册账号业务
+     * @param user
+     * @throws Exception
+     */
     public void register(User user) throws Exception {
         LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
         User result = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID, user.getUserID()));
@@ -38,6 +48,10 @@ public class UserService {
             userMapper.insert(user);
     }
 
+    /**
+     * 修改用户信息业务
+     * @param user
+     */
     public void updateUser(User user){
         LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
         User oringinalUser = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID, user.getUserID()));
@@ -45,6 +59,13 @@ public class UserService {
         userMapper.updateById(user);
     }
 
+    /**
+     * 修改用户安全信息业务
+     * @param userID
+     * @param password
+     * @param newPassword
+     * @throws Exception
+     */
     public void updatePassword(String userID, String password, String newPassword) throws Exception {
         LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
         User user = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID,userID));
@@ -55,6 +76,11 @@ public class UserService {
         userMapper.updateById(user);
     }
 
+    /**
+     * 根据用户ID查询目标用户
+     * @param userID
+     * @return
+     */
     public User getUserByID(String userID) {
         LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
         return userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID,userID));
