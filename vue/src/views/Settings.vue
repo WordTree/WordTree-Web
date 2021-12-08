@@ -5,7 +5,7 @@
   <div class="setting-page">
     <div class="mainbody">
       <el-tabs v-model="activeName"  style="width: 50%;" >
-        <el-tab-pane label="基本信息" name="first" style="border-color: transparent;display: flex;justify-content: center">
+        <el-tab-pane label="基本信息" name="first" style="border-color: transparent;display: flex;justify-content: center;">
          <div class="form-container">
           <el-form
           ref="userInfoForm"
@@ -269,8 +269,10 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 50px);
   justify-content: center;
+  padding-top:20px;
+  box-sizing: border-box;
 }
 
 .mainbody {
@@ -278,7 +280,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  bottom: 160px;
+  bottom: 5vh;
 }
 
 .form-container {
