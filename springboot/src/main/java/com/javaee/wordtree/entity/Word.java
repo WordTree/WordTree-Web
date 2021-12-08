@@ -1,9 +1,12 @@
 package com.javaee.wordtree.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author DaY1zz
@@ -26,6 +29,20 @@ public class Word {
     private String picUrl;
     //归属词书
     private String belongBook;
+
+    //词义
+    @TableField(exist = false)
+    private List<Translation> translations;
+
+    //短语
+    @TableField(exist = false)
+    private List<Phrase> phrases;
+
+    //例句
+    @TableField(exist = false)
+    private List<Sentence> sentences;
+
+
 
 
 }

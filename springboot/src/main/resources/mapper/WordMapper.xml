@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javaee.wordtree.mapper.WordMapper">
+    
+    <resultMap id="wordMap" type="com.javaee.wordtree.entity.Word">
+        <id property="wordID" column="wordID"/>
+        <result property="word" column="word"/>
+        <result property="ukPhone" column="uk_phone"/>
+        <result property="usPhone" column="us_phone"/>
+        <result property="remMethod" column="rem_method"/>
+        <result property="picUrl" column="pic_url"/>
+        <result property="belongBook" column="belong_book"/>
+        <collection property="translations" ofType="com.javaee.wordtree.entity.Translation">
+            <result property="enTran" column="en_tran"/>
+            <result property="cnTran" column="cn_tran"/>
+            <result property="wordType" column="word_type"/>
+        </collection>
+        <collection property="phrases" ofType="com.javaee.wordtree.entity.Phrase">
+            <result property="enPhrase" column="en_phrase"/>
+            <result property="cnPhrase" column="cn_phrase"/>
+        </collection>
+        <collection property="sentences" ofType="com.javaee.wordtree.entity.Sentence">
+            <result property="enSentence" column="en_sentence"/>
+            <result property="cnSentence" column="cn_sentence"/>
+        </collection>
+
+    </resultMap>
+    <select id="findNewWordsID" resultType="int" parameterType="map">
+        select w.wordID
+        from (word as w,`user`as u)
+        where u.userID = #{userID}
+        and w.belong_book = u.target_book
+        and w.wordID not in (select mr.wordID from memory_record as mr where mr.userID = #{userID})
+        limit #{needCount}
+    </select>
+
+    <select id="findWord" resultMap="wordMap" parameterType="int">
+        select w.*,s.en_sentence,s.cn_sentence,t.en_tran,t.cn_tran,t.word_type,p.en_phrase,p.cn_phrase
+        from (word as w)
+        left outer join phrase as p on w.wordID = p.wordID
+        left outer join translation as t on w.wordID = t.wordID
+        left outer join sentence as s on w.wordID = s.wordID
+        where w.wordID = #{wordID}
+    </select>
+
+
+
+
+</mapper>

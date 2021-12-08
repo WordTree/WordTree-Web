@@ -15,4 +15,8 @@ public interface MmryRecordMapper extends BaseMapper<MmryRecord> {
     List<CircleData> findMmryPercentage(String userID);
 
     int findNeedReviewWordCount(String userID);
+
+    int findLearnedWordCount(String userID);
+
+    List<Integer> findNeedReviewWordsID(String userID);
 }

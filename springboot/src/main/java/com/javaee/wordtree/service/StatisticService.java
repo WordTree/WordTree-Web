@@ -95,13 +95,12 @@ public class StatisticService {
     }
 
     /**
-     * 根据用户ID获取已学习的单词总量
+     * 根据用户ID获取在目标词书中已学习的单词总量
      * @param userID
      * @return
      */
     public int getLearnedWordCount(String userID){
-        LambdaQueryWrapper<MmryRecord> lambdaQueryWrapper = Wrappers.lambdaQuery();
-        return mmryRecordMapper.selectCount(lambdaQueryWrapper.eq(MmryRecord::getUserID,userID));
+        return mmryRecordMapper.findLearnedWordCount(userID);
     }
 
     /**
@@ -116,11 +115,11 @@ public class StatisticService {
 
     /**
      * 根据用户ID获取今日需要复习的单词数
-     * @param usrID
+     * @param userID
      * @return
      */
-    public int getNeedReviewWordCount(String usrID){
-        return mmryRecordMapper.findNeedReviewWordCount(usrID);
+    public int getNeedReviewWordCount(String userID){
+        return mmryRecordMapper.findNeedReviewWordCount(userID);
     }
 
 
