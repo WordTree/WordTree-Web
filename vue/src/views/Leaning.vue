@@ -13,25 +13,106 @@
           <span @click="playPhone">{{ phone }}</span>
         </div>
       </div>
-      <div class="btn-panel">
-        <div class="answer-btn-container" :class="{ shake: noActivated }">
-          <button @click="check($event)">
+      <div class="btn-panel" v-if="showBtnPanel">
+        <div class="answer-btn-container">
+          <button
+            :disabled="btndisabled"
+            id="ans-btn-1"
+            @click="check($event)"
+            :class="{ shake: shakeActivated[0], turnGreen: isCorrect[0] }"
+          >
             <span class="btn-text">{{ btnText[0] }}</span>
           </button>
         </div>
         <div class="answer-btn-container">
-          <button @click="check($event)">
+          <button
+            :disabled="btndisabled"
+            id="ans-btn-2"
+            @click="check($event)"
+            :class="{ shake: shakeActivated[1], turnGreen: isCorrect[1] }"
+          >
             <span class="btn-text">{{ btnText[1] }}</span>
           </button>
         </div>
         <div class="answer-btn-container">
-          <button @click="check($event)">
+          <button
+            :disabled="btndisabled"
+            id="ans-btn-3"
+            @click="check($event)"
+            :class="{ shake: shakeActivated[2], turnGreen: isCorrect[2] }"
+          >
             <span class="btn-text">{{ btnText[2] }}</span>
           </button>
         </div>
         <div class="answer-btn-container">
-          <button @click="check($event)">
+          <button
+            :disabled="btndisabled"
+            id="ans-btn-4"
+            @click="check($event)"
+            :class="{ shake: shakeActivated[3], turnGreen: isCorrect[3] }"
+          >
             <span class="btn-text">{{ btnText[3] }}</span>
+          </button>
+        </div>
+      </div>
+      <div class="info-panel" v-if="showInfoPanel">
+        <div class="trans">
+          <ul>
+            <li class="tran" v-for="(tran, index) in trans" :key="index">
+              <div class="tran-text">
+                <span>{{ tran.wordType }}.{{ tran.cnTran }}</span>
+              </div>
+            </li>
+          </ul>
+          <div style="margin-left: 40px"></div>
+        </div>
+        <div class="phrases" v-if="showPhrases">
+          <ul>
+            <li v-for="(phrase, index) in phrases" :key="index">
+              <div class="phrase-text">
+                <span>{{ phrase.enPhrase }}</span>
+                <span style="margin-left: 20px">{{ phrase.cnPhrase }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="sentences" v-if="showSentences">
+          <ul>
+            <li v-for="(sentence, index) in sentences" :key="index">
+              <div class="en-sentence-text">
+                <span>{{ sentence.enSentence }}</span>
+              </div>
+              <div class="cn-sentence-text">
+                <span>{{ sentence.cnSentence }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="rem" v-if="showRem">
+          <span style="margin:15px 5px 15px 40px">{{ remMethod }}</span>
+        </div>
+        <div class="nextBtn">
+          <button id="nextWord" @click="showMemoryPage">
+            <span>Continue</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 74 74"
+              height="34"
+              width="34"
+            >
+              <circle
+                stroke-width="3"
+                stroke="black"
+                r="35.5"
+                cy="37"
+                cx="37"
+              ></circle>
+              <path
+                fill="black"
+                d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
+              ></path>
+            </svg>
           </button>
         </div>
       </div>
@@ -40,7 +121,8 @@
 </template>
 
 <script>
-import List from "@/utils/list.js";
+import WordList from "@/utils/list.js";
+import request from "@/utils/request.js";
 
 export default {
   name: "Learning",
@@ -48,7 +130,15 @@ export default {
     return {
       words: {},
       phoneType: 0,
-      btnText: ["权限", "Text2", "Text3", "Text4"],
+      btnText: ["Text1", "Text2", "Text3", "Text4"],
+      shakeActivated: [false, false, false, false],
+      isCorrect: [false, false, false, false],
+      showBtnPanel: true,
+      showInfoPanel: false,
+      btndisabled: false,
+      showPhrases:true,
+      showSentences:true,
+      showRem:true
     };
   },
   methods: {
@@ -62,27 +152,121 @@ export default {
     playPhone() {
       this.$refs.phonePlayer.play();
     },
-    check(event){
-        const text = event.target.getElementsByTagName('span')[0].innerHTML;
-        if(text===this.trans)
-            console.log("success");
-        else
-            console.log("false");
-            noActivated = true;
-    }
+    // 检查选择的解释是否正确
+    check(event) {
+      const text = event.target.getElementsByTagName("span")[0].innerHTML;
+      const id = event.target.id;
+      var index;
+      this.btndisabled = true;
+      switch (id) {
+        case "ans-btn-1":
+          index = 0;
+          break;
+        case "ans-btn-2":
+          index = 1;
+          break;
+        case "ans-btn-3":
+          index = 2;
+          break;
+        case "ans-btn-4":
+          index = 3;
+          break;
+        default:
+          throw "错误:button 组件 id 未注册";
+      }
+      if (text === this.getTrans(this.trans)) {
+        console.log("success");
+        this.isCorrect[index] = true;
+        this.words.current.strangeDegree -= 1;
+        setTimeout(() => {
+          this.isCorrect[index] = false;
+        }, 1000);
+      } else {
+        this.shakeActivated[index] = true;
+        setTimeout(() => {
+          this.shakeActivated[index] = false;
+        }, 1000);
+      }
+      setTimeout(() => {
+        this.showInfo();
+      }, 1000);
+    },
+    // 向服务器发送请求，请求新一轮单词
+    getNewWords() {
+      let userJson = localStorage.getItem("user");
+      let user = JSON.parse(userJson);
+      request
+        .get("/memory/newWords", {
+          params: {
+            userID: user.userID,
+            needCount: user.needCount,
+          },
+        })
+        .then((res) => {
+          this.words = new WordList(res.data);
+        });
+    },
+    // 随机给四个按钮赋值
+    updateExplans() {
+      var randomWords = this.words.getFourNodes();
+      var explans = [];
+      for (var word of randomWords) {
+        explans.push(this.getTrans(word.data.translations));
+      }
+      this.btnText = explans;
+    },
+    // 根据 translations 对象拼凑翻译
+    getTrans(trans) {
+      var res = "";
+      for (var tran of trans) {
+        res += tran.wordType + "." + tran.cnTran + ";";
+      }
+      return res;
+    },
+    showInfo() {
+      this.showBtnPanel = false;
+      this.showInfoPanel = true;
+    },
+    showMemoryPage() {
+      this.words.next();
+      switch (this.words.current.strangeDegree) {
+        case 3: {
+          this.showBtnPanel = true;
+          this.showInfoPanel = false;
+          this.btndisabled = false;
+          this.updateExplans();
+          break;
+        }
+      }
+    },
+  },
+  beforeCreate() {
+    let userJson = localStorage.getItem("user");
+    let user = JSON.parse(userJson);
+    request
+      .get("/memory/newWords", {
+        params: {
+          userID: user.userID,
+          needCount: user.needCount,
+        },
+      })
+      .then((res) => {
+        this.words = new WordList(res.data);
+      });
   },
   created() {
-    const returnedWords = [
-      {
-        word: "access",
-        uk_phone: "[uk'ækses]",
-        us_phone: "[us'æksɛs]",
-        rem_method: "ac ＋ cess(去) → 来去要走通道 → 通道",
-        cn_tran: "权限",
-        word_type: "v",
-      },
-    ];
-    this.$data.words = new List(returnedWords);
+    var _this = this;
+    document.onkeydown = function (e) {
+      let key = window.event.keyCode;
+      if (key == 13) {
+        if (_this.showInfoPanel) {
+          _this.showMemoryPage();
+        }
+      }
+    };
+  },
+  mounted() {
+    this.updateExplans();
   },
   computed: {
     wordText() {
@@ -93,8 +277,8 @@ export default {
       else if (this.phoneType === 1) return "英";
     },
     phone() {
-      if (this.phoneType === 1) return this.words.data().uk_phone;
-      else return this.words.data().us_phone;
+      if (this.phoneType === 1) return this.words.data().ukPhone;
+      else return this.words.data().usPhone;
     },
     phoneUrl() {
       return (
@@ -104,9 +288,33 @@ export default {
         this.wordText
       );
     },
-    trans(){
-        return this.words.data().cn_tran;
-    }
+    trans() {
+      return this.words.data().translations;
+    },
+    sentences() {
+      if(this.words.data().sentences.length === 0){
+        this.showSentences = false;
+      }else{
+        this.showSentences = true;
+      }
+      return this.words.data().sentences;
+    },
+    phrases() {
+      if(this.words.data().phrases.length === 0){
+        this.showPhrases = false;
+      }else{
+        this.showPhrases = true;
+      }
+      return this.words.data().phrases;
+    },
+    remMethod() {
+      if(this.words.data().remMethod === null){
+        this.showRem  = false;
+      }else{
+        this.showRem = true;
+      }
+      return this.words.data().remMethod;
+    },
   },
 };
 </script>
@@ -154,6 +362,7 @@ export default {
 
 .phone {
   text-align: center;
+  margin-top: 10px;
 }
 
 .phone-switch-btn {
@@ -171,20 +380,147 @@ export default {
 
 .answer-btn-container button {
   width: 80%;
-  height: 100px;
+  height: 9vh;
   background-color: rgb(238, 242, 245);
   border-color: transparent;
   border-radius: 10px;
 }
 
+.answer-btn-container button[disabled] {
+  width: 80%;
+  height: 9vh;
+  background-color: rgb(238, 242, 245);
+  border-color: transparent;
+  border-radius: 10px;
+  color: black;
+}
+
 .btn-text {
   font-family: Helvetica;
-  font-size:24px;
+  font-size: 24px;
+}
+
+.info-panel {
+  font-size: 20px;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.trans {
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  height: auto;
+  padding: 5px;
+  box-sizing: border-box;
+  margin: 5px 0;
+}
+
+.rem {
+  width: 100%;
+  background-color: rgb(247,248,250);
+  border-radius: 10px;
+  height: auto;
+  padding: 10px 5px;
+  box-sizing: border-box;
+  margin: 15px 0;
+}
+
+.trans ul li {
+  list-style: none;
+  margin: 10px 0;
+}
+
+.tran-text {
+  font-family: Helvetica;
+}
+
+.sentences {
+  margin: 10px 0;
+  width: 100%;
+  background-color: rgba(238, 242, 245, 0.5);
+  border-radius: 10px;
+  height: auto;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.sentences li {
+  list-style: none;
+}
+
+.en-sentence-text {
+  margin: 0;
+}
+
+.cn-sentence-text {
+  margin-bottom: 15px;
+}
+
+.nextBtn {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-content: flex-end;
+}
+
+#nextWord {
+  cursor: pointer;
+  font-weight: 700;
+  font-family: Helvetica, "sans-serif";
+  transition: all 0.2s;
+  padding: 10px 20px;
+  border-radius: 100px;
+  background: #cfef00;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  flex: 0;
+}
+
+#nextWord:hover {
+  background: #a6c900;
+}
+
+#nextWord:active {
+  transform: scale(0.95);
+}
+
+#nextWord:hover svg {
+  transform: translateX(5px);
+}
+
+#nextWord > svg {
+  width: 34px;
+  margin-left: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.phrases {
+  width: 100%;
+  background-color: rgba(238, 242, 245, 0.5);
+  border-radius: 10px;
+  height: auto;
+  padding: 5px;
+  box-sizing: border-box;
+  margin: 15px 0;
+}
+
+.phrases li {
+  list-style: none;
+}
+
+.phrase-text {
+  margin: 5px 0;
 }
 
 .shake {
-	-webkit-animation: shake-horizontal 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
-	        animation: shake-horizontal 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+  -webkit-animation: shake-horizontal 0.8s
+    cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+  animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
 }
 
 /**
@@ -196,59 +532,85 @@ export default {
   0%,
   100% {
     -webkit-transform: translateX(0);
-            transform: translateX(0);
+    transform: translateX(0);
   }
   10%,
   30%,
   50%,
   70% {
     -webkit-transform: translateX(-10px);
-            transform: translateX(-10px);
+    transform: translateX(-10px);
   }
   20%,
   40%,
   60% {
     -webkit-transform: translateX(10px);
-            transform: translateX(10px);
+    transform: translateX(10px);
   }
   80% {
     -webkit-transform: translateX(8px);
-            transform: translateX(8px);
+    transform: translateX(8px);
   }
   90% {
     -webkit-transform: translateX(-8px);
-            transform: translateX(-8px);
+    transform: translateX(-8px);
   }
 }
 @keyframes shake-horizontal {
   0%,
   100% {
     -webkit-transform: translateX(0);
-            transform: translateX(0);
+    transform: translateX(0);
   }
   10%,
   30%,
   50%,
   70% {
     -webkit-transform: translateX(-10px);
-            transform: translateX(-10px);
+    transform: translateX(-10px);
   }
   20%,
   40%,
   60% {
     -webkit-transform: translateX(10px);
-            transform: translateX(10px);
+    transform: translateX(10px);
   }
   80% {
     -webkit-transform: translateX(8px);
-            transform: translateX(8px);
+    transform: translateX(8px);
   }
   90% {
     -webkit-transform: translateX(-8px);
-            transform: translateX(-8px);
+    transform: translateX(-8px);
+    background-color: rgba(249, 37, 36, 0.5);
   }
 }
 
+.turnGreen {
+  animation-name: turnGreen;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
 
-
+@keyframes turnGreen {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+  }
+  20%,
+  40%,
+  60% {
+  }
+  80% {
+  }
+  90% {
+    background-color: rgba(60, 220, 20, 0.5);
+  }
+}
 </style>
