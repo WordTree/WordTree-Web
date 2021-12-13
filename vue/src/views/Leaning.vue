@@ -89,7 +89,7 @@
           </ul>
         </div>
         <div class="rem" v-if="showRem">
-          <span style="margin:15px 5px 15px 40px">{{ remMethod }}</span>
+          <span style="margin: 15px 5px 15px 40px">{{ remMethod }}</span>
         </div>
         <div class="nextBtn">
           <button id="nextWord" @click="showMemoryPage">
@@ -116,6 +116,24 @@
           </button>
         </div>
       </div>
+      <div class="confirm-panel" v-if="showConfirmPanel">
+        <div
+          class="sentences"
+          style="padding: 20px 10px; height: 100%"
+          v-if="showSentences&&(words.current.strangeDegree!=1)"
+        >
+          <span style="font-size: 20px">{{ sentences[0].enSentence }}</span>
+        </div>
+        <div class="hint" v-if="(words.current.strangeDegree==1)">
+          <span>最后一步，在没有提示的情况下回忆单词</span>
+        </div>
+        <div class="confirm-btn-container">
+          <div class="confirm-btn">
+            <button @click="confirm">认识</button>
+            <button @click="showInfo">不认识</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -136,9 +154,10 @@ export default {
       showBtnPanel: true,
       showInfoPanel: false,
       btndisabled: false,
-      showPhrases:true,
-      showSentences:true,
-      showRem:true
+      showPhrases: true,
+      showSentences: true,
+      showRem: true,
+      showConfirmPanel:false,
     };
   },
   methods: {
@@ -154,8 +173,8 @@ export default {
     },
     // 检查选择的解释是否正确
     check(event) {
-      const text = event.target.getElementsByTagName("span")[0].innerHTML;
       const id = event.target.id;
+      console.log(id);
       var index;
       this.btndisabled = true;
       switch (id) {
@@ -174,8 +193,8 @@ export default {
         default:
           throw "错误:button 组件 id 未注册";
       }
+      const text = this.btnText[index];
       if (text === this.getTrans(this.trans)) {
-        console.log("success");
         this.isCorrect[index] = true;
         this.words.current.strangeDegree -= 1;
         setTimeout(() => {
@@ -225,6 +244,7 @@ export default {
     },
     showInfo() {
       this.showBtnPanel = false;
+      this.showConfirmPanel = false;
       this.showInfoPanel = true;
     },
     showMemoryPage() {
@@ -237,8 +257,24 @@ export default {
           this.updateExplans();
           break;
         }
+        case 2: {
+          this.showBtnPanel = false;
+          this.showInfoPanel = false;
+          this.showConfirmPanel = true;
+          break;
+        }
+        case 1:{
+          this.showBtnPanel = false;
+          this.showInfoPanel = false;
+          this.showConfirmPanel = true;
+          break;
+        }
       }
     },
+    confirm(){
+      this.words.current.strangeDegree -= 1;
+      this.showInfo();
+    }
   },
   beforeCreate() {
     let userJson = localStorage.getItem("user");
@@ -292,25 +328,25 @@ export default {
       return this.words.data().translations;
     },
     sentences() {
-      if(this.words.data().sentences.length === 0){
+      if (this.words.data().sentences.length === 0) {
         this.showSentences = false;
-      }else{
+      } else {
         this.showSentences = true;
       }
       return this.words.data().sentences;
     },
     phrases() {
-      if(this.words.data().phrases.length === 0){
+      if (this.words.data().phrases.length === 0) {
         this.showPhrases = false;
-      }else{
+      } else {
         this.showPhrases = true;
       }
       return this.words.data().phrases;
     },
     remMethod() {
-      if(this.words.data().remMethod === null){
-        this.showRem  = false;
-      }else{
+      if (this.words.data().remMethod === null) {
+        this.showRem = false;
+      } else {
         this.showRem = true;
       }
       return this.words.data().remMethod;
@@ -341,6 +377,8 @@ export default {
 }
 
 .word-text {
+  position:relative;
+  top:20px;
   text-align: center;
   font-family: Helvetica;
   font-size: 58px;
@@ -362,7 +400,7 @@ export default {
 
 .phone {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .phone-switch-btn {
@@ -383,7 +421,7 @@ export default {
   height: 9vh;
   background-color: rgb(238, 242, 245);
   border-color: transparent;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 .answer-btn-container button[disabled] {
@@ -420,7 +458,7 @@ export default {
 
 .rem {
   width: 100%;
-  background-color: rgb(247,248,250);
+  background-color: rgb(247, 248, 250);
   border-radius: 10px;
   height: auto;
   padding: 10px 5px;
@@ -447,6 +485,70 @@ export default {
   box-sizing: border-box;
 }
 
+.confirm-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
+
+.confirm-btn-container {
+  flex: 1;
+  width:100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items:flex-end;
+}
+
+.confirm-btn {
+  width: 100%;
+  position:relative;
+  bottom: 5vh;
+  display:flex;
+  justify-content: space-around;
+}
+
+.confirm-btn button {
+ width:10vw;
+ height:4.5vh;
+ padding: 15px 25px;
+ border: unset;
+ border-radius: 15px;
+ color: #212121;
+ z-index: 1;
+ background: #e8e8e8;
+ position: relative;
+ font-weight: 1000;
+ font-size: 17px;
+ -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ transition: all 250ms;
+}
+
+.confirm-btn button::before {
+  content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ height: 100%;
+ width: 0;
+ border-radius: 15px;
+ background-color: #212121;
+ z-index: -1;
+ -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+ transition: all 250ms
+}
+
+.confirm-btn button:hover {
+  color: #e8e8e8;
+}
+
+.confirm-btn button:hover::before {
+   width: 100%;
+}
+
 .sentences li {
   list-style: none;
 }
@@ -464,6 +566,13 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-content: flex-end;
+}
+
+.hint {
+  color:grey;
+  position:relative;
+  top:3vh;
+  left:2vw;
 }
 
 #nextWord {
