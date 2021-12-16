@@ -26,11 +26,15 @@ public class UserService {
      * @param user
      * @return 返回登录用户的信息
      */
-    public User loginVerify(User user){
+    public User loginVerify(User user) throws Exception {
         LambdaQueryWrapper<User> userLambdaQueryWrapper = Wrappers.lambdaQuery();
         User result = userMapper.selectOne(userLambdaQueryWrapper.eq(User::getUserID, user.getUserID()).eq(User::getPassword, user.getPassword()));
-        result.setPassword(null);
-        return result;
+        if(result!=null){
+            result.setPassword(null);
+            return result;
+        }else{
+            throw new Exception("用户名或密码错误");
+        }
     }
 
     /**

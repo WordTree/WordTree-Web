@@ -22,10 +22,10 @@ public class MmryRecord {
     @TableField(value = "userID")
     private String userID;
 
-    private Date lastMmryTime;
-
     private Date nextMmryTime;
 
     private int phase;
+
+
 
 }

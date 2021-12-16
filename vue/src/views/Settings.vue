@@ -5,7 +5,7 @@
   <div class="setting-page">
     <div class="mainbody">
       <el-tabs v-model="activeName"  style="width: 50%;" >
-        <el-tab-pane label="基本信息" name="first" style="border-color: transparent;display: flex;justify-content: center;">
+        <el-tab-pane label="基本信息" name="first" style="border-color: transparent;display: flex;justify-content: center">
          <div class="form-container">
           <el-form
           ref="userInfoForm"

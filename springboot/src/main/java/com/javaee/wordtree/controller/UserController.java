@@ -22,17 +22,22 @@ public class UserController {
 
     @PostMapping("/login")
     public Result<?> login(@RequestBody User user){
-        User result = userService.loginVerify(user);
+        User result = null;
+        try {
+            result = userService.loginVerify(user);
+            return Result.success(result);
+        } catch (Exception e) {
+            return Result.error("-1", e.getMessage());
+        }
 
-        if(result==null)
-            return Result.error("-1", "用户名或密码错误");
-        return Result.success(result);
+
+
     }
 
     @PostMapping("/register")
     public Result<?> register(@RequestBody User user){
-        try {
 
+        try {
             userService.register(user);
             return Result.success();
 
