@@ -2,7 +2,7 @@
   <div class="page">
     <div class="mainbody">
       <audio ref="phonePlayer" :src="phoneUrl"></audio>
-      <div class="word-panel">
+      <div class="word-panel" v-if="showWordPanel">
         <div class="word-text">
           <span>{{ wordText }}</span>
         </div>
@@ -17,6 +17,7 @@
         <div class="answer-btn-container">
           <button
             :disabled="btndisabled"
+            ref="ansBtn1"
             id="ans-btn-1"
             @click="check($event)"
             :class="{ shake: shakeActivated[0], turnGreen: isCorrect[0] }"
@@ -27,6 +28,7 @@
         <div class="answer-btn-container">
           <button
             :disabled="btndisabled"
+            ref="ansBtn2"
             id="ans-btn-2"
             @click="check($event)"
             :class="{ shake: shakeActivated[1], turnGreen: isCorrect[1] }"
@@ -37,6 +39,7 @@
         <div class="answer-btn-container">
           <button
             :disabled="btndisabled"
+            ref="ansBtn3"
             id="ans-btn-3"
             @click="check($event)"
             :class="{ shake: shakeActivated[2], turnGreen: isCorrect[2] }"
@@ -47,6 +50,7 @@
         <div class="answer-btn-container">
           <button
             :disabled="btndisabled"
+            ref="ansBtn4"
             id="ans-btn-4"
             @click="check($event)"
             :class="{ shake: shakeActivated[3], turnGreen: isCorrect[3] }"
@@ -120,17 +124,32 @@
         <div
           class="sentences"
           style="padding: 20px 10px; height: 100%"
-          v-if="showSentences&&(words.current.strangeDegree!=1)"
+          v-if="showSentences && words.current.strangeDegree != 1"
         >
           <span style="font-size: 20px">{{ sentences[0].enSentence }}</span>
         </div>
-        <div class="hint" v-if="(words.current.strangeDegree==1)">
+        <div class="hint" v-if="words.current.strangeDegree == 1">
           <span>最后一步，在没有提示的情况下回忆单词</span>
         </div>
         <div class="confirm-btn-container">
           <div class="confirm-btn">
             <button @click="confirm">认识</button>
             <button @click="showInfo">不认识</button>
+          </div>
+        </div>
+      </div>
+      <div class="spell-panel" v-if="showSpellPanel">
+        <div class="input-container">
+          <input
+            type="text"
+            autofocus="true"
+            @keyup.enter="spellCheck"
+            v-model="inputSpell"
+            :class="{shakeText:spellShake,greenText:greenText}"
+            ref="spellingBox"
+          />
+          <div style="margin-top: 10px">
+            <span>{{ getTrans(this.trans) }}</span>
           </div>
         </div>
       </div>
@@ -151,13 +170,19 @@ export default {
       btnText: ["Text1", "Text2", "Text3", "Text4"],
       shakeActivated: [false, false, false, false],
       isCorrect: [false, false, false, false],
+      showWordPanel: true,
       showBtnPanel: true,
       showInfoPanel: false,
       btndisabled: false,
       showPhrases: true,
       showSentences: true,
       showRem: true,
-      showConfirmPanel:false,
+      showConfirmPanel: false,
+      showSpellPanel: false,
+      inputSpell: "",
+      spellShake:false,
+      greenText:false,
+      allowCommit:true
     };
   },
   methods: {
@@ -173,27 +198,48 @@ export default {
     },
     // 检查选择的解释是否正确
     check(event) {
-      const id = event.target.id;
-      console.log(id);
-      var index;
+      var text = "";
+      const btn = event.target;
       this.btndisabled = true;
-      switch (id) {
-        case "ans-btn-1":
+      var index = 0;
+      switch (btn) {
+        case this.$refs.ansBtn1:
           index = 0;
+          text = this.btnText[0];
           break;
-        case "ans-btn-2":
+        case this.$refs.ansBtn2:
           index = 1;
+          text = this.btnText[1];
           break;
-        case "ans-btn-3":
+        case this.$refs.ansBtn3:
           index = 2;
+          text = this.btnText[2];
           break;
-        case "ans-btn-4":
+        case this.$refs.ansBtn4:
           index = 3;
+          text = this.btnText[3];
           break;
         default:
-          throw "错误:button 组件 id 未注册";
+          {
+            text = btn.innerHTML;
+            switch(text) {
+              case this.btnText[0]:
+                index = 0;
+                break;
+              case this.btnText[1]:
+                index = 1;
+                break;
+              case this.btnText[2]:
+                index = 2;
+                break;
+              case this.btnText[3]:
+                index = 3;
+                break;
+              default:
+                throw "按钮渲染错误";
+            }
+          }
       }
-      const text = this.btnText[index];
       if (text === this.getTrans(this.trans)) {
         this.isCorrect[index] = true;
         this.words.current.strangeDegree -= 1;
@@ -245,12 +291,16 @@ export default {
     showInfo() {
       this.showBtnPanel = false;
       this.showConfirmPanel = false;
+      this.showSpellPanel = false;
       this.showInfoPanel = true;
+      this.showWordPanel = true;
     },
     showMemoryPage() {
-      this.words.next();
+        this.words.next();
+      this.inputSpell = "";
       switch (this.words.current.strangeDegree) {
         case 3: {
+          this.showWordPanel = true;
           this.showBtnPanel = true;
           this.showInfoPanel = false;
           this.btndisabled = false;
@@ -258,23 +308,60 @@ export default {
           break;
         }
         case 2: {
+          this.showWordPanel = true;
           this.showBtnPanel = false;
           this.showInfoPanel = false;
           this.showConfirmPanel = true;
           break;
         }
-        case 1:{
+        case 1: {
+          this.showWordPanel = true;
           this.showBtnPanel = false;
           this.showInfoPanel = false;
           this.showConfirmPanel = true;
           break;
+        }
+        case 0: {
+          this.showInfoPanel = false;
+          this.showWordPanel = false;
+          this.showBtnPanel = false;
+          this.showSpellPanel = true;
+          setTimeout(() => {
+            this.$refs.spellingBox.focus();
+          },200)
         }
       }
     },
-    confirm(){
+    confirm() {
       this.words.current.strangeDegree -= 1;
       this.showInfo();
-    }
+    },
+    spellCheck() {
+      if(!this.allowCommit){
+        return;
+      }
+      this.$refs.spellingBox.disabled = true;
+      this.allowCommit = false;
+      if (this.inputSpell == this.wordText) {
+        this.greenText = true;
+        setTimeout(() => {
+          this.greenText = false;
+          this.inputSpell = "";
+          this.allowCommit = true;
+          this.$refs.spellingBox.disabled = false;
+          this.words.delete();
+          this.showMemoryPage();
+        },800)
+      }else{
+        this.spellShake = true;
+        setTimeout(() => {
+          this.spellShake = false;
+          this.showInfo();
+          this.allowCommit = true;
+          this.$refs.spellingBox.disabled = false;
+        }, 800);
+      }
+    },
   },
   beforeCreate() {
     let userJson = localStorage.getItem("user");
@@ -377,8 +464,8 @@ export default {
 }
 
 .word-text {
-  position:relative;
-  top:20px;
+  position: relative;
+  top: 20px;
   text-align: center;
   font-family: Helvetica;
   font-size: 58px;
@@ -494,51 +581,51 @@ export default {
 
 .confirm-btn-container {
   flex: 1;
-  width:100%;
+  width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items:flex-end;
+  align-items: flex-end;
 }
 
 .confirm-btn {
   width: 100%;
-  position:relative;
+  position: relative;
   bottom: 5vh;
-  display:flex;
+  display: flex;
   justify-content: space-around;
 }
 
 .confirm-btn button {
- width:10vw;
- height:4.5vh;
- padding: 15px 25px;
- border: unset;
- border-radius: 15px;
- color: #212121;
- z-index: 1;
- background: #e8e8e8;
- position: relative;
- font-weight: 1000;
- font-size: 17px;
- -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
- box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
- transition: all 250ms;
+  width: 10vw;
+  height: 4.5vh;
+  padding: 15px 25px;
+  border: unset;
+  border-radius: 15px;
+  color: #212121;
+  z-index: 1;
+  background: #e8e8e8;
+  position: relative;
+  font-weight: 1000;
+  font-size: 17px;
+  -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+  box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+  transition: all 250ms;
 }
 
 .confirm-btn button::before {
   content: "";
- position: absolute;
- top: 0;
- left: 0;
- height: 100%;
- width: 0;
- border-radius: 15px;
- background-color: #212121;
- z-index: -1;
- -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
- box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
- transition: all 250ms
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-radius: 15px;
+  background-color: #212121;
+  z-index: -1;
+  -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+  box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
+  transition: all 250ms;
 }
 
 .confirm-btn button:hover {
@@ -546,7 +633,7 @@ export default {
 }
 
 .confirm-btn button:hover::before {
-   width: 100%;
+  width: 100%;
 }
 
 .sentences li {
@@ -569,10 +656,43 @@ export default {
 }
 
 .hint {
-  color:grey;
-  position:relative;
-  top:3vh;
-  left:2vw;
+  color: grey;
+  position: relative;
+  top: 3vh;
+  left: 2vw;
+}
+
+.spell-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  bottom: 5vh;
+}
+
+.input-container input {
+  font-size: 60px;
+  letter-spacing: 10px;
+  border-width: 0;
+  text-align: center;
+}
+
+.input-container input:focus {
+  outline: none;
+}
+
+.input-container input[disabled] {
+  background-color: transparent;
 }
 
 #nextWord {
@@ -630,6 +750,12 @@ export default {
   -webkit-animation: shake-horizontal 0.8s
     cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
   animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+
+.shakeText {
+    -webkit-animation: shake-text-horizontal 0.8s
+    cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+  animation: shake-text-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
 }
 
 /**
@@ -695,11 +821,76 @@ export default {
   }
 }
 
+@-webkit-keyframes shake-text-horizontal {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px);
+  }
+  80% {
+    -webkit-transform: translateX(8px);
+    transform: translateX(8px);
+  }
+  90% {
+    -webkit-transform: translateX(-8px);
+    transform: translateX(-8px);
+  }
+}
+@keyframes shake-text-horizontal {
+  0%{
+    color:red;
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px);
+  }
+  80% {
+    -webkit-transform: translateX(8px);
+    transform: translateX(8px);
+  }
+  90% {
+    -webkit-transform: translateX(-8px);
+    transform: translateX(-8px);
+    color:red;
+  }
+}
+
 .turnGreen {
   animation-name: turnGreen;
   animation-duration: 0.8s;
   animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
+
+.greenText {
+  color:#3CDC14;
+}
+
 
 @keyframes turnGreen {
   0%,

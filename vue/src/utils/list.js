@@ -34,7 +34,6 @@ class WordList {
     delete() {
         this.current.prior.next = this.current.next;
         this.current.next.prior = this.current.prior;
-        this.current = this.current.next;
         this.length -= 1;
     }
 
@@ -103,6 +102,7 @@ class WordList {
         var node = this.current;
         for(var i = 0;i<3;i++){
             var offset = array[i];
+            node = this.current;
             while(offset>0){
                 node = this.getNext(node);
                 offset -= 1;
