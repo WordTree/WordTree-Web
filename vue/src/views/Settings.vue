@@ -272,6 +272,7 @@ export default {
   min-height: calc(100vh - 50px);
   justify-content: center;
   padding-top:20px;
+  box-sizing: border-box;
 }
 
 .mainbody {

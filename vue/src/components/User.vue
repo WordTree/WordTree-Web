@@ -13,10 +13,13 @@
             </div>
         </div>
         <hr>
+        <span>点击按钮，开始今天的学习吧！</span>
+        <el-button type='success' @click="toLearning">开始学习</el-button>
     </el-card>
 </template>
 
 <script>
+
 export default {
     name: 'User',
     props: {
@@ -54,7 +57,9 @@ export default {
         }
     },
     methods: {
-
+        toLearning(){
+            this.$router.push('/learning');
+        }
     }
 }
 </script>
@@ -65,7 +70,7 @@ export default {
         border-radius: 6px;
         padding:0px;
         height: 100%;
-        max-width: 1400px;
+        max-width: none;
         max-height:229px;
         border-color:transparent;
         flex: 1;
