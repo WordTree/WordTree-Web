@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author DaY1zz
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * 分页插件配置
  */
 
+@EnableTransactionManagement
 @Configuration
 @MapperScan("com.javaee.wordtree.mapper")
 public class MybatisPlusConfig {

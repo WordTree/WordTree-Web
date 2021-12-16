@@ -269,8 +269,9 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 50px);
   justify-content: center;
+  padding-top:20px;
 }
 
 .mainbody {
@@ -278,7 +279,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  bottom: 160px;
+  bottom: 5vh;
 }
 
 .form-container {
