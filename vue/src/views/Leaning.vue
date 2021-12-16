@@ -186,6 +186,7 @@ export default {
     };
   },
   methods: {
+    // 切换单词发音的类型，英/美，切换时自动播放。
     switchPhone() {
       if (this.phoneType === 0) this.phoneType = 1;
       else if (this.phoneType === 1) this.phoneType = 0;
@@ -193,6 +194,7 @@ export default {
         this.playPhone();
       }, 200);
     },
+    // 控制播放器对象播放单词的读音
     playPhone() {
       this.$refs.phonePlayer.play();
     },
@@ -288,6 +290,7 @@ export default {
       }
       return res;
     },
+    // 展示单词的详细信息
     showInfo() {
       this.showBtnPanel = false;
       this.showConfirmPanel = false;
@@ -295,6 +298,7 @@ export default {
       this.showInfoPanel = true;
       this.showWordPanel = true;
     },
+    // 根据单词的不同阶段，渲染不同的界面用于复习
     showMemoryPage() {
         this.words.next();
       this.inputSpell = "";
@@ -332,10 +336,12 @@ export default {
         }
       }
     },
+    // 用于【阶段三】，用户点击【认识】之后触发的事件
     confirm() {
       this.words.current.strangeDegree -= 1;
       this.showInfo();
     },
+    // 用于【阶段四】，用于检查用户的拼写是否正确，并控制相关的动画
     spellCheck() {
       if(!this.allowCommit){
         return;
@@ -392,9 +398,11 @@ export default {
     this.updateExplans();
   },
   computed: {
+    // 返回单词的word部分
     wordText() {
       return this.words.data().word;
     },
+    // 根据发音类型，返回对象的读音标签
     phonelog() {
       if (this.phoneType === 0) return "美";
       else if (this.phoneType === 1) return "英";
@@ -403,6 +411,7 @@ export default {
       if (this.phoneType === 1) return this.words.data().ukPhone;
       else return this.words.data().usPhone;
     },
+    // 拼接发音URl
     phoneUrl() {
       return (
         "http://dict.youdao.com/dictvoice?type=" +

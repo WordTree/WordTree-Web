@@ -114,9 +114,6 @@ export default {
           this.columnChartData = res.data.columnChartData;
           this.circleChartData = res.data.circleChartData;
           this.lineChartData = res.data.lineChartData;
-          console.log(this.columnChartData);
-          console.log(this.circleChartData);
-          console.log(this.lineChartData);
         })
       }
     },
