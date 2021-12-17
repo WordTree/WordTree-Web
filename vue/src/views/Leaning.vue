@@ -1,4 +1,5 @@
 <template>
+  <Header :url="userImageUrl" style="margin-bottom: 5px" />
   <div class="page">
     <div class="mainbody">
       <audio ref="phonePlayer" :src="phoneUrl"></audio>
@@ -123,13 +124,17 @@
       <div class="confirm-panel" v-if="showConfirmPanel">
         <div
           class="sentences"
-          style="padding: 20px 10px; height: 100%"
+          style="padding: 3vh 10px; height: 100%; position: relative; top: 10vh"
           v-if="showSentences && words.current.strangeDegree != 1"
         >
-          <span style="font-size: 20px">{{ sentences[0].enSentence }}</span>
+          <span style="font-size: 22px; padding-left: 1vw">{{
+            sentences[0].enSentence
+          }}</span>
         </div>
         <div class="hint" v-if="words.current.strangeDegree == 1">
-          <span>最后一步，在没有提示的情况下回忆单词</span>
+          <span style="display: block"
+            >最后一步，在没有提示的情况下回忆单词</span
+          >
         </div>
         <div class="confirm-btn-container">
           <div class="confirm-btn">
@@ -145,12 +150,21 @@
             autofocus="true"
             @keyup.enter="spellCheck"
             v-model="inputSpell"
-            :class="{shakeText:spellShake,greenText:greenText}"
+            :class="{ shakeText: spellShake, greenText: greenText }"
             ref="spellingBox"
           />
           <div style="margin-top: 10px">
             <span>{{ getTrans(this.trans) }}</span>
           </div>
+        </div>
+      </div>
+      <div class="learn-finished" v-if="showFinishedPanel">
+        <div class="finished-text">
+          <span>{{ finishText }}</span>
+        </div>
+        <div class="finish-btn-container">
+          <button @click="toHome">完成学习</button>
+          <button @click="nextBatch" v-if="hasNextBatch">再学一轮</button>
         </div>
       </div>
     </div>
@@ -160,11 +174,14 @@
 <script>
 import WordList from "@/utils/list.js";
 import request from "@/utils/request.js";
+import Header from "@/components/Header.vue";
 
 export default {
   name: "Learning",
   data() {
     return {
+      allwords: {},
+      storeWords: [],
       words: {},
       phoneType: 0,
       btnText: ["Text1", "Text2", "Text3", "Text4"],
@@ -173,17 +190,24 @@ export default {
       showWordPanel: true,
       showBtnPanel: true,
       showInfoPanel: false,
+      showConfirmPanel: false,
+      showSpellPanel: false,
+      showFinishedPanel: false,
       btndisabled: false,
       showPhrases: true,
       showSentences: true,
       showRem: true,
-      showConfirmPanel: false,
-      showSpellPanel: false,
       inputSpell: "",
-      spellShake:false,
-      greenText:false,
-      allowCommit:true
+      spellShake: false,
+      greenText: false,
+      allowCommit: true,
+      config: {},
+      userImageUrl: this.$store.getters.userImageUrl,
+      hasNextBatch: true,
     };
+  },
+  components: {
+    Header,
   },
   methods: {
     // 切换单词发音的类型，英/美，切换时自动播放。
@@ -221,26 +245,25 @@ export default {
           index = 3;
           text = this.btnText[3];
           break;
-        default:
-          {
-            text = btn.innerHTML;
-            switch(text) {
-              case this.btnText[0]:
-                index = 0;
-                break;
-              case this.btnText[1]:
-                index = 1;
-                break;
-              case this.btnText[2]:
-                index = 2;
-                break;
-              case this.btnText[3]:
-                index = 3;
-                break;
-              default:
-                throw "按钮渲染错误";
-            }
+        default: {
+          text = btn.innerHTML;
+          switch (text) {
+            case this.btnText[0]:
+              index = 0;
+              break;
+            case this.btnText[1]:
+              index = 1;
+              break;
+            case this.btnText[2]:
+              index = 2;
+              break;
+            case this.btnText[3]:
+              index = 3;
+              break;
+            default:
+              throw "按钮渲染错误";
           }
+        }
       }
       if (text === this.getTrans(this.trans)) {
         this.isCorrect[index] = true;
@@ -271,11 +294,39 @@ export default {
         })
         .then((res) => {
           this.words = new WordList(res.data);
+          this.allwords = new WordList(res.data);
+          this.showBtns();
+        });
+    },
+    // 向服务器发送请求，请求复习的所有目标单词
+    getReviewWords() {
+      let userJson = localStorage.getItem("user");
+      let user = JSON.parse(userJson);
+      request
+        .get("/memory/reviewWords", {
+          params: {
+            userID: user.userID,
+          },
+        })
+        .then((res) => {
+          this.storeWords = res.data;
+          this.getNextReviewWords();
+          this.allwords = new WordList(res.data);
         });
     },
     // 随机给四个按钮赋值
     updateExplans() {
-      var randomWords = this.words.getFourNodes();
+      var randomWords = this.allwords.getFourNodes();
+      var flag = false;
+      for (var word of randomWords) {
+        if (word.data.wordID == this.words.current.data.wordID) {
+          flag = true;
+        }
+      }
+      if (!flag) {
+        var index = this.words.randomNum(0, 3); // 随机一个位置
+        randomWords.splice(index, 1, this.words.current); // 插入当前节点
+      }
       var explans = [];
       for (var word of randomWords) {
         explans.push(this.getTrans(word.data.translations));
@@ -297,16 +348,23 @@ export default {
       this.showSpellPanel = false;
       this.showInfoPanel = true;
       this.showWordPanel = true;
+      this.playPhone();
     },
     // 根据单词的不同阶段，渲染不同的界面用于复习
     showMemoryPage() {
-        this.words.next();
+      // 判断循环链表结构是否为空，为空则学习结束，跳转到结束界面
+      if (this.words.length <= 1) {
+        this.showFinished();
+        return;
+      }
+      this.words.next();
       this.inputSpell = "";
       switch (this.words.current.strangeDegree) {
         case 3: {
           this.showWordPanel = true;
           this.showBtnPanel = true;
           this.showInfoPanel = false;
+          this.showSpellPanel = false;
           this.btndisabled = false;
           this.updateExplans();
           break;
@@ -315,6 +373,7 @@ export default {
           this.showWordPanel = true;
           this.showBtnPanel = false;
           this.showInfoPanel = false;
+          this.showSpellPanel = false;
           this.showConfirmPanel = true;
           break;
         }
@@ -322,6 +381,7 @@ export default {
           this.showWordPanel = true;
           this.showBtnPanel = false;
           this.showInfoPanel = false;
+          this.showSpellPanel = false;
           this.showConfirmPanel = true;
           break;
         }
@@ -329,10 +389,11 @@ export default {
           this.showInfoPanel = false;
           this.showWordPanel = false;
           this.showBtnPanel = false;
+          this.showConfirmPanel = false;
           this.showSpellPanel = true;
           setTimeout(() => {
             this.$refs.spellingBox.focus();
-          },200)
+          }, 200);
         }
       }
     },
@@ -343,7 +404,7 @@ export default {
     },
     // 用于【阶段四】，用于检查用户的拼写是否正确，并控制相关的动画
     spellCheck() {
-      if(!this.allowCommit){
+      if (!this.allowCommit) {
         return;
       }
       this.$refs.spellingBox.disabled = true;
@@ -355,10 +416,19 @@ export default {
           this.inputSpell = "";
           this.allowCommit = true;
           this.$refs.spellingBox.disabled = false;
+          // 删除单词节点
           this.words.delete();
+          // 发送请求
+          if (this.config.mode === "learn") {
+            this.updateLearningRequest(this.words.data().wordID);
+          } else if (this.config.mode === "review") {
+            this.updateReviewRequest(this.words.data().wordID);
+          } else {
+            throw "学习模式不正常";
+          }
           this.showMemoryPage();
-        },800)
-      }else{
+        }, 800);
+      } else {
         this.spellShake = true;
         setTimeout(() => {
           this.spellShake = false;
@@ -368,22 +438,100 @@ export default {
         }, 800);
       }
     },
-  },
-  beforeCreate() {
-    let userJson = localStorage.getItem("user");
-    let user = JSON.parse(userJson);
-    request
-      .get("/memory/newWords", {
-        params: {
-          userID: user.userID,
-          needCount: user.needCount,
-        },
-      })
-      .then((res) => {
-        this.words = new WordList(res.data);
+    // 用于发送请求，当某个单词学习结束，请求更新数据库
+    updateLearningRequest(wordID) {
+      let userJson = localStorage.getItem("user");
+      let user = JSON.parse(userJson);
+      request.post("/memory/newWord", {
+        userID: user.userID,
+        wordID: wordID,
       });
+    },
+    // 用于发送请求，当某个单词复习结束，请求更新数据库
+    updateReviewRequest(wordID) {
+      let userJson = localStorage.getItem("user");
+      let user = JSON.parse(userJson);
+      request.put("/memory/reviewWord", {
+        userID: user.userID,
+        wordID: wordID,
+      });
+    },
+    // 根据 $store.state.learnConfig 初始化学习界面
+    InitByConfig() {
+      // 从 store 中取出 learningConfig，并保存在页面，仅赋值这一次，不进行数据绑定
+      this.config = this.$store.state.learningConfig;
+      if (this.config.mode == "learn") {
+        this.getNewWords();
+      } else if (this.config.mode == "review") {
+        this.getReviewWords();
+      } else {
+        this.$router.push("/");
+      }
+    },
+    // 获取下一轮复习单词
+    getNextReviewWords() {
+      let userJson = localStorage.getItem("user");
+      let user = JSON.parse(userJson);
+      const needCount = user.needCount;
+      if (this.storeWords.length > needCount) {
+        var result = new Array();
+        for (var i = 0; i < needCount; i++) {
+          result.push(this.storeWords.pop());
+        }
+        this.words = new WordList(result);
+      } else {
+        this.words = new WordList(this.storeWords);
+        this.storeWords = [];
+      }
+      this.showBtns();
+    },
+    // 返回主界面
+    toHome() {
+      this.$router.push("/");
+    },
+    // 进行下一轮单词的学习/复习
+    nextBatch() {
+      // 根据 config 判断学习/复习
+      if (this.config.mode == "learn") {
+        // 发送请求，请求新一轮单词
+        this.getNewWords();
+      } else if (this.config.mode == "review") {
+        // 从 storeWords 中取出新一轮单词放入 words
+        this.getNextReviewWords();
+      } else {
+        throw "错误的学习模式";
+      }
+    },
+    // 进入第一学习阶段，渲染按钮选择界面
+    showBtns() {
+      this.showWordPanel = true;
+      this.showBtnPanel = true;
+      this.showInfoPanel = false;
+      this.showConfirmPanel = false;
+      this.showSpellPanel = false;
+      this.showFinishedPanel = false;
+      this.btndisabled = false;
+      // 给四个按钮随机添加释义
+      this.updateExplans();
+    },
+    // 学习结束，渲染结束界面
+    showFinished() {
+      this.showWordPanel = false;
+      this.showBtnPanel = false;
+      this.showInfoPanel = false;
+      this.showConfirmPanel = false;
+      this.showSpellPanel = false;
+      this.showFinishedPanel = true;
+      this.hasNextBatch = !(
+        this.config.mode == "review" && this.storeWords.length == 0
+      );
+    },
   },
+  beforeCreate() {},
   created() {
+    // 初始化页面
+    this.InitByConfig();
+    // 绑定回车事件
     var _this = this;
     document.onkeydown = function (e) {
       let key = window.event.keyCode;
@@ -407,6 +555,7 @@ export default {
       if (this.phoneType === 0) return "美";
       else if (this.phoneType === 1) return "英";
     },
+    // 从数据里取出音标
     phone() {
       if (this.phoneType === 1) return this.words.data().ukPhone;
       else return this.words.data().usPhone;
@@ -420,9 +569,11 @@ export default {
         this.wordText
       );
     },
+    // 从数据里取出释义
     trans() {
       return this.words.data().translations;
     },
+    // 从数据里取出例句
     sentences() {
       if (this.words.data().sentences.length === 0) {
         this.showSentences = false;
@@ -431,6 +582,7 @@ export default {
       }
       return this.words.data().sentences;
     },
+    // 从数据里取出短语
     phrases() {
       if (this.words.data().phrases.length === 0) {
         this.showPhrases = false;
@@ -439,6 +591,7 @@ export default {
       }
       return this.words.data().phrases;
     },
+    // 从数据里取出助记
     remMethod() {
       if (this.words.data().remMethod === null) {
         this.showRem = false;
@@ -446,6 +599,16 @@ export default {
         this.showRem = true;
       }
       return this.words.data().remMethod;
+    },
+    // 根据阶段返回结束时展示的字样
+    finishText() {
+      if (this.config.mode == "learn") {
+        return "本轮学习已结束~";
+      } else if (this.config.mode == "review" && this.storeWords.length == 0) {
+        return "今日复习任务已完成，休息一下吧~";
+      } else {
+        return "本轮复习已结束~";
+      }
     },
   },
 };
@@ -607,6 +770,7 @@ export default {
 
 .confirm-btn button {
   width: 10vw;
+  min-width: 120px;
   height: 4.5vh;
   padding: 15px 25px;
   border: unset;
@@ -669,6 +833,11 @@ export default {
   position: relative;
   top: 3vh;
   left: 2vw;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
 }
 
 .spell-panel {
@@ -702,6 +871,38 @@ export default {
 
 .input-container input[disabled] {
   background-color: transparent;
+}
+
+.learn-finished {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.finished-text {
+  font-size: 15px;
+  color: gray;
+  position: relative;
+  bottom: 5vh;
+}
+
+.finish-btn-container {
+  margin-top: 2vh;
+}
+
+.finish-btn-container button {
+  border-width: 0.5px;
+  border-radius: 15px;
+  border-color: transparent;
+  background-color: rgba(249, 164, 9, 0.8);
+  margin: 0 20px;
+  font-size: 18px;
+  padding: 5px;
+  width: 10vw;
+  max-width: 120px;
+  min-width: 90px;
 }
 
 #nextWord {
@@ -762,9 +963,10 @@ export default {
 }
 
 .shakeText {
-    -webkit-animation: shake-text-horizontal 0.8s
+  -webkit-animation: shake-text-horizontal 0.8s
     cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
-  animation: shake-text-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+  animation: shake-text-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955)
+    both;
 }
 
 /**
@@ -859,8 +1061,8 @@ export default {
   }
 }
 @keyframes shake-text-horizontal {
-  0%{
-    color:red;
+  0% {
+    color: red;
   }
   100% {
     -webkit-transform: translateX(0);
@@ -886,7 +1088,7 @@ export default {
   90% {
     -webkit-transform: translateX(-8px);
     transform: translateX(-8px);
-    color:red;
+    color: red;
   }
 }
 
@@ -897,9 +1099,8 @@ export default {
 }
 
 .greenText {
-  color:#3CDC14;
+  color: rgb(76, 188, 20);
 }
-
 
 @keyframes turnGreen {
   0%,
@@ -919,7 +1120,8 @@ export default {
   80% {
   }
   90% {
-    background-color: rgba(60, 220, 20, 0.5);
+    /* background-color: rgba(60, 220, 20, 0.5); */
+    background-color: rgba(76, 188, 20, 0.5);
   }
 }
 </style>

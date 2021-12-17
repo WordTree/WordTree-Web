@@ -2,46 +2,46 @@
   <div class="body">
     <div
       class="login-card"
-      style="width: 400px; margin: 150px auto; z-index: 10"
+      style="width: 400px; margin: 150px auto; z-index: 10; max-width: 600px"
     >
-    <el-card shadow="always" class="card" >
-      <div
-        style="
-          color: aliceblue;
-          font-size: 30px;
-          text-align: center;
-          font-weight: bold;
-          padding: 30px;
-        "
-      >
-        Login
-      </div>
-      <el-form :model="form" :rules="rules" ref="form" size="normal">
-        <el-form-item prop="userID" style="padding-left: 43px">
-          <el-input
-            placeholder="账号"
-            prefix-icon="el-icon-user-solid"
-            style="width: 90%"
-            v-model="form.userID"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password" style="padding-left: 43px">
-          <el-input
-            placeholder="密码"
-            prefix-icon="el-icon-lock"
-            style="width: 90%"
-            v-model="form.password"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item style="padding-left: 110px">
-          <el-button style="width: 30%" type="success" @click="login"
-            >登 录</el-button
-          >
-          <el-button style="width: 30%" @click="register">注 册</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
+      <el-card shadow="always" class="card">
+        <div
+          style="
+            color: rgba(129,192,176,1);
+            font-size: 35px;
+            text-align: center;
+            font-weight: bold;
+            padding: 30px;
+          "
+        >
+          Login
+        </div>
+        <el-form :model="form" :rules="rules" ref="form" size="normal">
+          <el-form-item prop="userID" style="padding-left: 43px">
+            <el-input
+              placeholder="账号"
+              prefix-icon="el-icon-user-solid"
+              style="width: 90%"
+              v-model="form.userID"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="password" style="padding-left: 43px">
+            <el-input
+              placeholder="密码"
+              prefix-icon="el-icon-lock"
+              style="width: 90%"
+              v-model="form.password"
+              show-password
+            ></el-input>
+          </el-form-item>
+          <el-form-item style="padding-left: 110px">
+            <el-button style="width: 30%" type="primary" @click="login"
+              >登 录</el-button
+            >
+            <el-button style="width: 30%" @click="register">注 册</el-button>
+          </el-form-item>
+        </el-form>
+      </el-card>
     </div>
   </div>
 </template>
@@ -55,9 +55,7 @@ export default {
     return {
       form: {},
       rules: {
-        userID: [
-          { required: true, message: "请输入账号", trigger: "blur" },
-        ],
+        userID: [{ required: true, message: "请输入账号", trigger: "blur" }],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
     };
@@ -102,26 +100,27 @@ export default {
   font-family: "Quicksand", sans-serif;
   margin: 0;
   min-height: 100vh;
-  background-color: #e493d0;
+  /* background-color: #e493d0; */
+  background-color: rgb(170, 209, 222);
   background-image: radial-gradient(
       closest-side,
-      rgba(235, 105, 78, 1),
+      /* rgba(235, 105, 78, 1), */ rgba(113, 151, 170, 1),
       rgba(235, 105, 78, 0)
     ),
-    radial-gradient(closest-side, rgba(243, 11, 164, 1), rgba(243, 11, 164, 0)),
+    radial-gradient(closest-side, rgb(210, 231, 240), rgba(243, 11, 164, 0)),
     radial-gradient(
       closest-side,
-      rgba(254, 234, 131, 1),
+      /* rgba(254, 234, 131, 1), */ rgba(237, 213, 160, 1),
       rgba(254, 234, 131, 0)
     ),
     radial-gradient(
       closest-side,
-      rgba(170, 142, 245, 1),
+      /* rgba(170, 142, 245, 1), */ rgba(199, 163, 124, 1),
       rgba(170, 142, 245, 0)
     ),
     radial-gradient(
       closest-side,
-      rgba(248, 192, 147, 1),
+      /* rgba(248, 192, 147, 1), */ rgba(255, 215, 0, 1),
       rgba(248, 192, 147, 0)
     );
   background-size: 130vmax 130vmax, 80vmax 80vmax, 90vmax 90vmax,
@@ -148,9 +147,9 @@ export default {
 }
 
 .card {
-    border-radius: 10px;
-    background-color: rgba(235, 105, 78, 0.15);
-    border-color:transparent;
+  border-radius: 10px;
+  background-color: rgba(170, 209, 222, 0.15);
+  border-color: transparent;
 }
 
 @keyframes movement {

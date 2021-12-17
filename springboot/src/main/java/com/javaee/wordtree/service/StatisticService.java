@@ -88,7 +88,8 @@ public class StatisticService {
                 case 2:records.get(i).setType("了解");break;
                 case 3:records.get(i).setType("熟悉");break;
                 case 4:records.get(i).setType("掌握");break;
-                case 5:records.get(i).setType("烂熟于心");break;
+                case 5:records.get(i).setType("牢记");break;
+                case 6:records.get(i).setType(("烂熟于心"));break;
             }
         }
         return records;

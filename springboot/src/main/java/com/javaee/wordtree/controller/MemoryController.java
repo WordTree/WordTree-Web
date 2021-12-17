@@ -53,7 +53,6 @@ public class MemoryController {
     public Result<?> learnNewWord(@RequestBody Map<String,Object> reqBodyMap){
         String userID = (String) reqBodyMap.get("userID");
         int wordID = (int) reqBodyMap.get("wordID");
-
         memoryService.learnNewWord(userID,wordID);
         return Result.success();
 

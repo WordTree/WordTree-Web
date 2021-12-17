@@ -4,7 +4,7 @@
       <div style="flex: 1"></div>
         <div class="drop-items">
           <el-dropdown>
-             <div class="user-image" type="border-card" style="padding-top: 10px" >
+             <div class="user-image" type="border-card" style="" >
                 <el-avatar
                 :src="url"
                 shape="circle"
@@ -46,11 +46,11 @@ export default {
     .header {
         display:flex;
         height: 50px;
-        background-color: rgb(239, 242, 245);
+        background-color: #fff;
     }
 
     .logo {
-        font-size:24px;
+        font-size:28px;
         color: #5CAC44;
         align-self: center;
         padding:20px 20px;

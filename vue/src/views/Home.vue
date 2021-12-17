@@ -126,7 +126,7 @@ export default {
       return this.$store.state.user.userName;
     },
     yesterdayTimeCount(){
-      return this.$data.lineChartData[5].time;
+      //return this.$data.lineChartData[5].time;
     },
     weeklyTimeCount(){
       let sum = 0;
@@ -135,7 +135,7 @@ export default {
       return sum;
     },
     learningTimeCount(){
-      return this.$data.lineChartData[5].time;
+      //return this.$data.lineChartData[5].time;
     }
 
   },

@@ -48,7 +48,7 @@ class WordList {
     }
 
     // 获得当前节点的数据
-     data() {
+    data() {
         if (this.current.data === {} || this.current.data === null)
             throw "错误:访问的节点为空节点"
         else
@@ -82,35 +82,35 @@ class WordList {
     }
 
     // 生成互不相同的三个随机数，用于随机选取单词
-    getThreeNums(){
+    getThreeNums() {
         let array = new Array();
         var random = 1;
-        if(this.length < 6)
+        if (this.length < 6)
             throw "错误:链表的节点数小于4,不足以生成随机数"
-        while(array.length < 3){
-            random = this.randomNum(1,this.length - 2);
-            if(!array.includes(random))
+        while (array.length < 3) {
+            random = this.randomNum(1, this.length - 2);
+            if (!array.includes(random))
                 array.push(random);
         }
         return array;
     }
 
     // 随机生成三个单词，用于取中文释义
-    getFourNodes(){
+    getFourNodes() {
         let result = new Array();
         let array = this.getThreeNums();
         var node = this.current;
-        for(var i = 0;i<3;i++){
+        for (var i = 0; i < 3; i++) {
             var offset = array[i];
             node = this.current;
-            while(offset>0){
+            while (offset > 0) {
                 node = this.getNext(node);
                 offset -= 1;
             }
             result.push(node);
         }
-        var index = this.randomNum(0,3); // 随机一个位置
-            result.splice(index,0,this.current); // 插入当前节点
+        var index = this.randomNum(0, 3); // 随机一个位置
+        result.splice(index, 0, this.current); // 插入当前节点
         return result;
     }
 }

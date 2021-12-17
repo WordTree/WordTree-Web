@@ -7,8 +7,8 @@
       <el-card shadow="always" class="card">
         <div
           style="
-            color: aliceblue;
-            font-size: 30px;
+            color:rgb(100, 150, 230);
+            font-size: 35px;
             text-align: center;
             font-weight: bold;
             padding: 30px;
@@ -43,7 +43,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item style="padding-left:140px">
-            <el-button style="width: 40%;" type="success" @click="register" 
+            <el-button style="width: 40%;" type="warning" @click="register" 
               >注 册</el-button
             >
           </el-form-item>
@@ -111,26 +111,27 @@ export default {
   font-family: "Quicksand", sans-serif;
   margin: 0;
   min-height: 100vh;
-  background-color: #e493d0;
+  background-color: rgb(242,193,195);
   background-image: radial-gradient(
       closest-side,
-      rgba(235, 105, 78, 1),
+      rgb(190, 218, 240),
       rgba(235, 105, 78, 0)
+
     ),
-    radial-gradient(closest-side, rgba(243, 11, 164, 1), rgba(243, 11, 164, 0)),
+    radial-gradient(closest-side, rgba(244,207,201, 1), rgba(243, 11, 164, 0)),
     radial-gradient(
       closest-side,
-      rgba(254, 234, 131, 1),
+      rgba(176,215,248, 1),
       rgba(254, 234, 131, 0)
     ),
     radial-gradient(
       closest-side,
-      rgba(170, 142, 245, 1),
+      rgba(226,235,242, 1),
       rgba(170, 142, 245, 0)
     ),
     radial-gradient(
       closest-side,
-      rgba(248, 192, 147, 1),
+      rgba(122,134,202, 1),
       rgba(248, 192, 147, 0)
     );
   background-size: 130vmax 130vmax, 80vmax 80vmax, 90vmax 90vmax,
@@ -158,7 +159,7 @@ export default {
 
 .card {
   border-radius: 10px;
-  background-color: rgba(235, 105, 78, 0.15);
+  background-color: rgba(236,232,230, 0.15);
   border-color: transparent;
 }
 
