@@ -45,6 +45,14 @@
               <el-option label="CET-6" value="CET6luan_1"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="每轮单词数" prop="needCount" style="transform: scale(1.05)">
+            <el-select v-model="userInfoFormData.needCount">
+              <el-option label="5" value=5></el-option>
+              <el-option label="10" value=10></el-option>
+              <el-option label="15" value=15></el-option>
+              <el-option label="20" value=20></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('userInfoForm')"
               >更新基本信息</el-button
@@ -102,6 +110,7 @@ export default {
         avator: "",
         userID:"",
         password:'',
+        needCount:5,
       },
       passwordFormData:{
         password:"",
@@ -320,7 +329,7 @@ export default {
   text-align: center;
 }
 .avatar-uploader-icon svg {
-  margin-top: 74px; /* (178px - 28px) / 2 - 1px */
+  margin-top: 74px; 
 }
 .avatar {
   width: 178px;

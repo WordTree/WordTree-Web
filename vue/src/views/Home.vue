@@ -71,6 +71,7 @@ import WordDataColumn from "../components/WordDataColumn";
 import WordDataCircle from "@/components/WordDataCircle";
 import WordDataLine from "@/components/WordDataLine";
 import request from "../utils/request";
+import DataLoader from "../utils/dataLoader"
 import {Column, Line, Pie} from "@antv/g2plot";
 
 export default {
@@ -92,6 +93,7 @@ export default {
       columnChartData: [],   //柱状图数据
       circleChartData: [],   //饼图数据
       lineChartData: [],    //曲线图数据
+      dataLoader:new DataLoader()
     };
   },
 
@@ -111,9 +113,10 @@ export default {
           this.reviewWordCount = res.data.reviewWordCount;
           this.learnedWordCount = res.data.learnedWordCount;
           this.totalWordCount = res.data.totalWordCount;
-          this.columnChartData = res.data.columnChartData;
+          this.columnChartData = this.dataLoader.loadData("column",res.data.columnChartData);
           this.circleChartData = res.data.circleChartData;
-          this.lineChartData = res.data.lineChartData;
+          this.lineChartData = this.dataLoader.loadData("line",res.data.lineChartData);
+          
         })
       }
     },
@@ -126,7 +129,7 @@ export default {
       return this.$store.state.user.userName;
     },
     yesterdayTimeCount(){
-      //return this.$data.lineChartData[5].time;
+      return this.$data.lineChartData[5].time;
     },
     weeklyTimeCount(){
       let sum = 0;
@@ -135,7 +138,7 @@ export default {
       return sum;
     },
     learningTimeCount(){
-      //return this.$data.lineChartData[5].time;
+      return this.$data.lineChartData[6].time;
     }
 
   },

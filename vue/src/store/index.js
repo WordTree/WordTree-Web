@@ -8,7 +8,7 @@ export default createStore({
     },
     learningConfig:{
       mode:"",  
-    }
+    },
   },
   getters:{
     userImageUrl(state){

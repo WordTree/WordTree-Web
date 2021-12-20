@@ -204,6 +204,7 @@ export default {
       config: {},
       userImageUrl: this.$store.getters.userImageUrl,
       hasNextBatch: true,
+      startTime:{},
     };
   },
   components: {
@@ -541,9 +542,14 @@ export default {
         }
       }
     };
+    this.startTime = new Date();
   },
   mounted() {
     this.updateExplans();
+  },
+  unmounted(){
+    var endTime = new Date();
+    var learningSpan = (endTime.getTime() - this.startTime.getTime()) / 1000 / 60;
   },
   computed: {
     // 返回单词的word部分
