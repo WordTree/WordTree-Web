@@ -10,6 +10,7 @@
         FROM memory_record
         WHERE userID = #{userID}
         GROUP BY phase
+        ORDER BY phase
     </select>
 
     <select id="findNeedReviewWordCount" resultType="int" parameterType="String">

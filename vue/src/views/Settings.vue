@@ -228,8 +228,6 @@ export default {
               }
             })
           }
-
-
         }
         else {
           this.$message({
@@ -267,6 +265,7 @@ export default {
     this.userInfoFormData.targetBook = user.targetBook;
     this.userInfoFormData.userID = user.userID;
     this.userInfoFormData.avator = this.$store.getters.userImageUrl;
+    this.userInfoFormData.needCount = user.needCount;
   }
 
 };
@@ -289,7 +288,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  bottom: 5vh;
+  bottom: 2.5vh;
 }
 
 .form-container {

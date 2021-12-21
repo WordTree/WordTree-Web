@@ -311,8 +311,8 @@ export default {
         })
         .then((res) => {
           this.storeWords = res.data;
-          this.getNextReviewWords();
           this.allwords = new WordList(res.data);
+          this.getNextReviewWords();
         });
     },
     // 随机给四个按钮赋值
@@ -548,8 +548,14 @@ export default {
     this.updateExplans();
   },
   unmounted(){
+    let userJson = localStorage.getItem("user");
+    let user = JSON.parse(userJson);
     var endTime = new Date();
     var learningSpan = (endTime.getTime() - this.startTime.getTime()) / 1000 / 60;
+    request.put("/memory/learningTime",{
+      userID:user.userID,
+      learningTime:parseInt(learningSpan),
+    });
   },
   computed: {
     // 返回单词的word部分
@@ -778,14 +784,14 @@ export default {
   width: 10vw;
   min-width: 120px;
   height: 4.5vh;
-  padding: 15px 25px;
+  padding: 8px 25px;
   border: unset;
   border-radius: 15px;
   color: #212121;
   z-index: 1;
   background: #e8e8e8;
   position: relative;
-  font-weight: 1000;
+  font-weight: bold;
   font-size: 17px;
   -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
   box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);

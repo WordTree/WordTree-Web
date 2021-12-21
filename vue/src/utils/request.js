@@ -17,12 +17,11 @@ request.interceptors.request.use(config => {
     if (userJson === null) {
         router.push("/login");
     }
-    else if (user.userName==null || user.targetBook==null){
+    else if (user.userName==null|| user.targetBook==null){
         console.log("进入");
-        console.log(userJson.userName,userJson.targetBook);
+        console.log(user.userName,user.targetBook);
         router.push("/settings");
     }
-
     return config
 }, error => {
     return Promise.reject(error)
