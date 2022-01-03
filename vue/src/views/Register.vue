@@ -23,7 +23,11 @@
               prefix-icon="el-icon-user-solid"
               style="width: 90%"
               v-model="form.userID"
-            ></el-input>
+            >
+              <template #prefix>
+                <el-icon class="el-input__icon"><User/></el-icon>
+              </template>
+            </el-input>
           </el-form-item>
           <el-form-item prop="password" style="padding-left:40px">
             <el-input
@@ -32,7 +36,11 @@
               style="width: 90%"
               v-model="form.password"
               show-password
-            ></el-input>
+            >
+              <template #prefix>
+                <el-icon class="el-input__icon"><Key/></el-icon>
+              </template>
+            </el-input>
           </el-form-item>
           <el-form-item prop="confirm" style="padding-left:40px">
             <el-input
@@ -55,9 +63,15 @@
 
 <script>
 import request from "../utils/request";
+import {Key} from "@element-plus/icons"
+import {User} from "@element-plus/icons"
 
 export default {
   name: "Register",
+  components:{
+    User,
+    Key
+  },
   data() {
     return {
       form: {},

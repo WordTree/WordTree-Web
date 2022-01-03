@@ -4,10 +4,10 @@
     <div class="User">
       <div class="line-chart">
         <div class="line-caption" style="margin: 20px 20px 0px 20px">
-          <span class="caption-text"> 今日学习时间 </span>
+          <span class="caption-text"> 今日学习时长 </span>
         </div>
         <div class="line-chart-content">
-          <span style="font-size: 33px; padding-bottom: 0px; margin: 10px">
+          <span style="font-size: 33px; padding-bottom: 0px; margin: 10px" >
             {{ learningTimeCount }}
           </span>
           <span style="font-size: 20px">min</span>
@@ -19,6 +19,7 @@
           class="lone-chart-footer"
           style="
             margin-bottom: 0;
+            margin-left: 12px;
             display: flex;
             justify-content: space-between;
           "
@@ -90,9 +91,12 @@ export default {
       learnedWordCount: 0,
       totalWordCount: 0,
       learningTimeCount: 0,
+      yesterdayTimeCount:0,
+      weeklyTimeCount:0,
       columnChartData: [],   //柱状图数据
       circleChartData: [],   //饼图数据
       lineChartData: [],    //曲线图数据
+      flag: true,
       dataLoader:new DataLoader()
     };
   },
@@ -101,22 +105,27 @@ export default {
     this.init();
   },
   methods:{
-    init(){
+    init: function () {
+      console.log("调用init");
       let userJson = localStorage.getItem("user");
       if (!userJson) {
         this.$router.push("/login");
         return
-      }else{
+      } else {
         let user = JSON.parse(userJson);
-        this.$store.commit('setUser',user);
-        request.get("/statistic/"+user.userID + "/" + user.targetBook).then(res => {
+        this.$store.commit('setUser', user);
+        request.get("/statistic/" + user.userID + "/" + user.targetBook).then(res => {
           this.reviewWordCount = res.data.reviewWordCount;
           this.learnedWordCount = res.data.learnedWordCount;
           this.totalWordCount = res.data.totalWordCount;
-          this.columnChartData = this.dataLoader.loadData("column",res.data.columnChartData);
+          this.columnChartData = this.dataLoader.loadData("column", res.data.columnChartData);
           this.circleChartData = res.data.circleChartData;
-          this.lineChartData = this.dataLoader.loadData("line",res.data.lineChartData);
-          
+          this.lineChartData = this.dataLoader.loadData("line", res.data.lineChartData);
+          this.learningTimeCount = this.lineChartData[6].time;
+          this.yesterdayTimeCount = this.lineChartData[5].time;
+          this.weeklyTimeCount = 0;
+          for (const item of this.lineChartData)
+            this.weeklyTimeCount += item.time;
         })
       }
     },
@@ -128,18 +137,6 @@ export default {
     userName() {
       return this.$store.state.user.userName;
     },
-    yesterdayTimeCount(){
-      return this.$data.lineChartData[5].time;
-    },
-    weeklyTimeCount(){
-      let sum = 0;
-      for(const item of this.$data.lineChartData)
-        sum += item.time;
-      return sum;
-    },
-    learningTimeCount(){
-      return this.$data.lineChartData[6].time;
-    }
 
   },
 };
@@ -299,7 +296,7 @@ export default {
 }
 
 .caption-text {
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 20px;
   color: rgb(89, 89, 89);
 }

@@ -5,7 +5,7 @@
   <div class="setting-page">
     <div class="mainbody">
       <el-tabs v-model="activeName"  style="width: 50%;" >
-        <el-tab-pane label="基本信息" name="first" style="border-color: transparent;display: flex;justify-content: center">
+        <el-tab-pane label="基本信息" name="first" style="border-color: transparent;display: flex;justify-content: center;">
          <div class="form-container">
           <el-form
           ref="userInfoForm"
@@ -54,7 +54,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('userInfoForm')"
+            <el-button type="primary" @click="submitForm('userInfoForm')" style="font-family: PingFang;letter-spacing: 1px"
               >更新基本信息</el-button
             >
           </el-form-item>
@@ -80,7 +80,7 @@
               <el-input v-model="passwordFormData.confirmPassword" show-password></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('passwordForm')"
+              <el-button type="primary" @click="submitForm('passwordForm')" style="font-family: PingFang;letter-spacing: 1px"
               >更新安全信息</el-button
               >
             </el-form-item>
@@ -265,7 +265,7 @@ export default {
     this.userInfoFormData.targetBook = user.targetBook;
     this.userInfoFormData.userID = user.userID;
     this.userInfoFormData.avator = this.$store.getters.userImageUrl;
-    this.userInfoFormData.needCount = user.needCount;
+    this.userInfoFormData.needCount = user.needCount===0?5:user.needCount;
   }
 
 };

@@ -154,6 +154,11 @@ public class MemoryService {
         }
     }
 
+    /**
+     * 更新用户今日学习时长
+     * @param userID
+     * @param learningTime
+     */
     public void updateTodayLearningTime(String userID,int learningTime){
 
         Date todayDate = DateUtil.parseDate(DateUtil.today());
@@ -161,7 +166,7 @@ public class MemoryService {
         LambdaQueryWrapper<DateRecord> lambdaQueryWrapper = Wrappers.lambdaQuery();
         DateRecord dateRecord = dateRecordMapper.selectOne(lambdaQueryWrapper.eq(DateRecord::getUserID, userID).eq(DateRecord::getDate, todayDate));
 
-        dateRecord.setLearningTime(learningTime);
+        dateRecord.setLearningTime(dateRecord.getLearningTime()+learningTime);
         dateRecordMapper.update(dateRecord,lambdaQueryWrapper.eq(DateRecord::getUserID, userID).eq(DateRecord::getDate, todayDate));
 
     }

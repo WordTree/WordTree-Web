@@ -20,19 +20,25 @@
           <el-form-item prop="userID" style="padding-left: 43px">
             <el-input
               placeholder="账号"
-              prefix-icon="el-icon-user-solid"
               style="width: 90%"
               v-model="form.userID"
-            ></el-input>
+            >
+              <template #prefix>
+                <el-icon class="el-input__icon"><User/></el-icon>
+              </template>
+            </el-input>
           </el-form-item>
           <el-form-item prop="password" style="padding-left: 43px">
             <el-input
               placeholder="密码"
-              prefix-icon="el-icon-lock"
               style="width: 90%"
               v-model="form.password"
               show-password
-            ></el-input>
+            >
+              <template #prefix>
+                <el-icon class="el-input__icon"><Key/></el-icon>
+              </template>
+            </el-input>
           </el-form-item>
           <el-form-item style="padding-left: 110px">
             <el-button style="width: 30%" type="primary" @click="login"
@@ -48,9 +54,15 @@
 
 <script>
 import request from "../utils/request";
+import {Key} from "@element-plus/icons"
+import {User} from "@element-plus/icons"
 
 export default {
   name: "Login",
+  components:{
+    Key,
+    User
+  },
   data() {
     return {
       form: {},

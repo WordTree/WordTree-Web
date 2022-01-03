@@ -163,7 +163,7 @@
           <span>{{ finishText }}</span>
         </div>
         <div class="finish-btn-container">
-          <button @click="toHome">完成学习</button>
+          <button @click="toHome">休息一下</button>
           <button @click="nextBatch" v-if="hasNextBatch">再学一轮</button>
         </div>
       </div>
@@ -556,7 +556,8 @@ export default {
       userID:user.userID,
       learningTime:parseInt(learningSpan),
     });
-  },
+
+    },
   computed: {
     // 返回单词的word部分
     wordText() {

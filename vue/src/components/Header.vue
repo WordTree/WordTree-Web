@@ -16,8 +16,8 @@
                 </span>
             <template #dropdown>
               <el-dropdown-menu style="" >
-                <el-dropdown-item @click="toSettings" divided>个人设置</el-dropdown-item>
-                <el-dropdown-item @click="exit" divided>退出登录</el-dropdown-item>
+                <el-dropdown-item @click="toSettings" divided style="font-family: PingFang;letter-spacing: 1px">个人设置</el-dropdown-item>
+                <el-dropdown-item @click="exit" divided style="font-family: PingFang;letter-spacing: 1px">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>

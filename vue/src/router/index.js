@@ -8,27 +8,48 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta:{
+      // 页面标题title
+      title: 'WordTree'
+    }
+
   },
   {
     path: "/login",
     name:'Login',
-    component: Login
+    component: Login,
+    meta:{
+      // 页面标题title
+      title: '登录 - WordTree'
+    }
   },
   {
     path: "/register",
     name: "Register",
-    component: Register
+    component: Register,
+    meta:{
+      // 页面标题title
+      title: '注册 - WordTree'
+    }
   },
   {
     path:"/settings",
     name: 'Settings',
-    component:Settings
+    component:Settings,
+    meta:{
+      // 页面标题title
+      title: '个人设置 - WordTree'
+    }
   },
   {
     path: "/learning",
     name: 'Learning',
-    component: Learning
+    component: Learning,
+    meta:{
+      // 页面标题title
+      title: '记忆 - WordTree'
+    }
   }
 ]
 

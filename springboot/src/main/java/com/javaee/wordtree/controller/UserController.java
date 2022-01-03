@@ -30,8 +30,6 @@ public class UserController {
             return Result.error("-1", e.getMessage());
         }
 
-
-
     }
 
     @PostMapping("/register")

@@ -9,8 +9,8 @@
       xmlns="http://www.w3.org/2000/svg"
       p-id="6384"
       xmlns:xlink="http://www.w3.org/1999/xlink"
-      width="100"
-      height="100"
+      width="150"
+      height="150"
     >
       <path
         d="M0 788.389381a507.469027 108.743363 0 1 0 1014.938053 0 507.469027 108.743363 0 1 0-1014.938053 0Z"
@@ -38,6 +38,9 @@
         p-id="6389"
       ></path>
     </svg>
+    <div class="tips" >
+      <span style="color: rgb(200,206,218);font-weight:600;letter-spacing: 3px">暂无单词数据</span>
+    </div>
   </div>
 </template>
 
@@ -76,6 +79,7 @@ export default {
   width: 100%;
   min-height: 400px;
   flex: 1;
+
 }
 
 .svg{
@@ -83,6 +87,13 @@ export default {
   align-items: center;
   justify-content: center;
   height:100%;
+  flex-direction:column
+
+}
+
+.tips{
+  text-align: center;
+  margin-right: 0.7vw;
 }
 
 .hide{

@@ -10,10 +10,10 @@
     </div>
     <hr />
     <div class="btn-container">
-      <el-button type="primary"  @click="toReview" style="margin:10px 0"
+      <el-button type="primary"  @click="toReview" style="margin:10px 0;font-family: PingFang;letter-spacing: 2px"
         >开始复习</el-button
       >
-      <el-button type="success"  @click="toLearning" style="margin:10px 10px;"
+      <el-button type="success"  @click="toLearning" style="margin:10px 10px;font-family: PingFang;letter-spacing: 2px"
         >开始学习</el-button
       >
     </div>
@@ -98,7 +98,7 @@ export default {
 }
 
 .btn-container {
-  margin-top: 3vh;
+  margin-top: 5vh;
   width:100%;
   display: flex;
   flex-direction: row-reverse;
